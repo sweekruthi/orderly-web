@@ -6,10 +6,10 @@ class ChoreListBox extends Component {
         this.state = {
             descDisplay: "none"
         };
-        this.handleClick = this.handleClick.bind(this);
+        this.toggleDescDisplay = this.toggleDescDisplay.bind(this);
     }
 
-    handleClick(e) {
+    toggleDescDisplay(e) {
         e.target.classList.toggle('clb-desc-button-selected');
         let newDisplay = 'none';
         if (this.state.descDisplay === 'none') {
@@ -38,7 +38,7 @@ class ChoreListBox extends Component {
                     </div>
                     <div className="chore-list-box-right">
                         <div className="clb-time">{times[this.props.time]}</div>
-                        <button className="clb-desc-button" onClick={this.handleClick}>description</button>
+                        <button className="clb-desc-button" onClick={this.toggleDescDisplay}>description</button>
                     </div>
                 </div>
                 <div className="chore-list-desc-box" style={{display: this.state.descDisplay}}>

@@ -11,13 +11,17 @@ import HouseSelect from "./HouseSelect";
 import ChoreCalendar from "./ChoreCalendar";
 import ChoreList from "./ChoreList";
 
-/*Used to specify what type view chores are displayed in*/
+/*
+    Used to specify what type view chores are displayed in
+*/
 const ChoreView = {
     CALENDAR: 'calendar',
     LIST: 'list'
 };
 
-/*Used to specify what type of chore this page is displaying*/
+/*
+    Used to specify what type of chore this page is displaying
+*/
 const ChoreType = {
     UPCOMING: 'upcoming',
     COMPLETED: 'completed',
@@ -32,6 +36,7 @@ class Chores extends Component {
     constructor(props) {
         super(props);
         let initDate = new Date();
+
         this.state = {
             choreView: ChoreView.CALENDAR,
             choreType: ChoreType.UPCOMING,

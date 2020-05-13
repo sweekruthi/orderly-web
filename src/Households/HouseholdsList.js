@@ -1,18 +1,28 @@
 import React, {Component} from 'react';
+import AddHousehold from "./AddHousehold";
 
 class HouseholdsList extends Component {
+    constructor(props) {
+        super(props);
+        this.goToAddHousehold = this.goToAddHousehold.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+    }
 
-    handleClick = (e) => {
-        document.querySelector('.house-selected').classList.remove('house-selected');
-        e.target.classList.add('house-selected');
+    goToAddHousehold() {
+        this.props.setPage(<AddHousehold/>);
+    };
+
+    handleClick(e) {
+        document.querySelector('.house-button-selected').classList.remove('house-button-selected');
+        e.target.classList.add('house-button-selected');
     };
 
     render() {
         return (
-            <ul id="left-content">
-                <li className="house-selected" onClick={this.handleClick}>UW dorm</li>
-                <li onClick={this.handleClick}>Add household</li>
-            </ul>
+            <div id="house-list">
+                <button className="house-button">UW dorm</button>
+                <button className="house-button" onClick={this.goToAddHousehold}>Add household</button>
+            </div>
         )
     }
 }

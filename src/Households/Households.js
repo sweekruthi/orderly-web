@@ -1,14 +1,28 @@
 import React, {Component} from 'react';
-import HouseholdsList from "./HouseholdsList";
-import HouseholdsDetails from "./HouseholdsDetails";
+import './Households.css';
+import HouseholdViewer from "./HouseholdViewer";
 
 class Households extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            contentPage: <HouseholdViewer setPage={this.setHousePage}/>
+        };
+
+    }
+
+    setHousePage = (newPage) => {
+        this.setState(
+            {
+                contentPage: newPage
+            }
+        );
+    };
 
     render() {
         return (
-            <div id="content">
-                <HouseholdsList/>
-                <HouseholdsDetails/>
+            <div>
+                {this.state.contentPage}
             </div>
         )
     }
