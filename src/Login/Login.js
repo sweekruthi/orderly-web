@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import Request from 'superagent';
 import { FormGroup, InputGroup, Divider } from "@blueprintjs/core";
 import './Login.css';
@@ -15,6 +16,9 @@ function Login() {
     const [loginEmailHelper, setLoginEmailHelper] = React.useState("");
     const [loginPassword, setLoginPassword] = React.useState("");
     const [loginPasswordHelper, setLoginPasswordHelper] = React.useState("");
+
+    const [createMessage, setCreateMessage] = React.useState("");
+    const [loginMessage, setLoginMessage] = React.useState("");
 
     function createEmailOnChange(event) {
         setCreateEmail(event.target.value);
@@ -58,6 +62,14 @@ function Login() {
             .send(requestObject)
             .then(res => {
                 console.log("data is", res.body);
+                if (res.body.user_created) {
+                    setCreateMessage(`Account has been successfully created! Please Login.`);
+                } else {
+                    setCreateMessage("Something went wrong, please try again.");
+                }
+            })
+            .catch(err => {
+                setCreateMessage(`Something went wrong, please try again. Error is ${err}`);
             });
     }
 
@@ -67,8 +79,28 @@ function Login() {
             return;
         }
 
-        // TODO: verify email and password with database
-        navigate('home');
+        const requestObject = {
+            name: createEmail
+        };
+        const url = "http://127.0.0.1:8000/chorescheduling/create-user";
+
+        Request
+            .post(url)
+            .send(requestObject)
+            .then(res => {
+                if (res.body.user_created) {
+                    const expires = 60 * 60 * 1000;
+                    const inOneHour = new Date(new Date().getTime() + expires)
+                    Cookies.set('access_token', loginEmail, { expires: inOneHour })
+                    navigate('home');
+                } else {
+                    setLoginMessage("The entered email or password does not match our records.");
+                }
+            })
+            .catch(err => {
+                setLoginMessage(`Something went wrong, please try again. Error is ${err}`);
+            });
+
     }
 
     return (
@@ -81,24 +113,26 @@ function Login() {
                 </FormGroup>
 
                 <FormGroup label="Password" labelFor="text-input" inline={true} helperText={createPasswordHelper}>
-                    <InputGroup id="password" placeholder="Password" value={createPassword} onChange={createPasswordOnChange}/>
+                    <InputGroup id="password" placeholder="Password" value={createPassword} onChange={createPasswordOnChange} />
                 </FormGroup>
 
                 <button disabled={!createEmail || !createPassword} onClick={handleCreateAccount}>Create an account</button>
+                <p>{createMessage}</p>
             </div>
-            <Divider id="divider"/>
+            <Divider id="divider" />
             <div>
                 <h2>Log in</h2>
 
                 <FormGroup label="Email" labelFor="text-input" inline={true} helperText={loginEmailHelper}>
-                    <InputGroup id="login-email" placeholder="E-mail address" value={loginEmail} onChange={loginEmailOnChange}/>
+                    <InputGroup id="login-email" placeholder="E-mail address" value={loginEmail} onChange={loginEmailOnChange} />
                 </FormGroup>
 
                 <FormGroup label="Password" labelFor="text-input" inline={true} helperText={loginPasswordHelper}>
-                    <InputGroup id="login-password" placeholder="Password" value={loginPassword} onChange={loginPasswordOnChange}/>
+                    <InputGroup id="login-password" placeholder="Password" value={loginPassword} onChange={loginPasswordOnChange} />
                 </FormGroup>
 
                 <button disabled={!loginEmail || !loginPassword} onClick={handleLogin}>Login</button>
+                <p>{loginMessage}</p>
             </div>
         </div>
     )

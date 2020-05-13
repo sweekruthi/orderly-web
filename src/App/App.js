@@ -12,6 +12,7 @@ class App extends React.Component{
                 <Router>
                     <Login path="/"/>
                     <Home path="home"/>
+                    <Login path="login"/>
                 </Router>
             </div>
         );
