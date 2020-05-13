@@ -16,8 +16,8 @@ class NavBar extends Component {
         return (
             <ul id="nav-bar">
                 <li className="nav-selected" onClick={(e) => this.handleClick(e, <Households/>)}>Households</li>
-                <li onClick={(e) => this.handleClick(e, <Chores/>)}>Chores</li>
-                <li onClick={(e) => this.handleClick(e, <Notifications/>)}>Notifications</li>
+                <li onClick={(e) => this.handleClick(e, "chores")}>Chores</li>
+                <li onClick={(e) => this.handleClick(e, "notifications")}>Notifications</li>
             </ul>
         )
     }
