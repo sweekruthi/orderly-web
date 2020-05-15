@@ -129,6 +129,8 @@
 #add-house-title-form {
     font-size: 36pt;
     height: 1.2em;
+    line-height: 1.6;
+    padding-top: .2em;
     margin-left: .3em;
     margin-top: .3em;
     border-radius: .1em;
