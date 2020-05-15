@@ -3,6 +3,10 @@ import NewMemberCircle from "./NewMemberCircle";
 import MemberCircle from "./MemberCircle";
 import Households from "./Households";
 
+/**
+ * Page which allows a user to asoociate a new household with their account. Either by Creating a new house, or by
+ * joining a pre-existing one.
+ */
 class AddHousehold extends Component {
     constructor(props) {
         super(props);
@@ -13,6 +17,9 @@ class AddHousehold extends Component {
         this.addHousehold = this.addHousehold.bind(this);
     }
 
+    /**
+     * Adds a new member to a house the user is creating.
+     */
     addMember() {
         let newMember = document.getElementById("new-member").value;
         this.state.members.push(newMember);
@@ -25,6 +32,9 @@ class AddHousehold extends Component {
         console.log(this.state.members);
     };
 
+    /**
+     * Adds a new household either joined or created by the user.
+     */
     addHousehold() {
         this.props.setPage(<Households/>);
     }

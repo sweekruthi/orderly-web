@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 
+/**
+ * Displays all of the information associated with a household, such as Name, members, as well as links to pages
+ * containing more information.
+ */
 class HouseholdsDetails extends Component {
     constructor(props) {
         super(props);
     }
-
-    goToAddHousehold(e) {
-        document.querySelector('.nav-selected').classList.remove('nav-selected');
-        e.target.classList.add('nav-selected');
-    };
 
     render() {
         return (

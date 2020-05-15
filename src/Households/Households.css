@@ -119,7 +119,6 @@
 #add-house {
     display: flex;
     flex-direction: row;
-    position: relative;
 }
 
 .add-filler {
@@ -167,8 +166,10 @@
 
 .add-house-new-member-form {
     font-size: 14pt;
-    height: 1.2em;
+    height: 1.4em;
     width: 5.14em;
+    line-height: 1.6;
+    padding-top: .2em;
     margin-left: 2.57em;
     margin-top: .2em;
     outline: none;
@@ -178,9 +179,9 @@
     font-size: 14pt;
     display: inline;
     position: relative;
-    height: 1em;
+    height: 1.4em;
     width: 2.5em;
-    top: .15em;
+    top: -.05em;
     background-color: transparent;
     border: solid .5px grey;
     outline: none;
@@ -191,12 +192,12 @@
 }
 
 #add-house-submit {
-    position: relative;
+    position: absolute;
     float: right;
     height: 4em;
     width: 12em;
     right: 3em;
-    top: 18em;
+    bottom: 4em;
     background-color: transparent;
     border: solid 1px lightgrey;
     border-radius: 1em;

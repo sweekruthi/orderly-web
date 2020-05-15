@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import AddHousehold from "./AddHousehold";
 
+/**
+ * Displays a list of all the households a user is a member of. As well as a button for adding new households
+ */
 class HouseholdsList extends Component {
     constructor(props) {
         super(props);
@@ -8,11 +11,17 @@ class HouseholdsList extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    /**
+     * Switches Households content page to the add house page.
+     */
     goToAddHousehold() {
         this.props.setPage(<AddHousehold setPage={this.props.setPage}/>);
     };
 
-    handleClick(e) {
+    /**
+     * Toggles a house button between selected and unselected.
+     */
+    toggleHouseButton(e) {
         document.querySelector('.house-button-selected').classList.remove('house-button-selected');
         e.target.classList.add('house-button-selected');
     };
