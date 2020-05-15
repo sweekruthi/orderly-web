@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import AddHouseNewMemberCircle from "./AddHouseNewMemberCircle";
+import NewMemberCircle from "./NewMemberCircle";
 import MemberCircle from "./MemberCircle";
+import Households from "./Households";
 
 class AddHousehold extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ class AddHousehold extends Component {
             members: []
         };
         this.addMember = this.addMember.bind(this);
-        console.log("running");
+        this.addHousehold = this.addHousehold.bind(this);
     }
 
     addMember() {
@@ -24,6 +25,10 @@ class AddHousehold extends Component {
         console.log(this.state.members);
     };
 
+    addHousehold() {
+        this.props.setPage(<Households/>);
+    }
+
     render() {
         return(
             <div id="add-house">
@@ -37,9 +42,10 @@ class AddHousehold extends Component {
                     <div id="house-details-members-list">
                         {this.state.members.map((value) => {
                             return <MemberCircle member={value}/>})}
-                        <AddHouseNewMemberCircle addMember={this.addMember}/>
+                        <NewMemberCircle addMember={this.addMember}/>
                     </div>
                     <hr className="house-details-linebreak"/>
+                    <button id="add-house-submit" onClick={this.addHousehold}>Create House</button>
                 </div>
             </div>
         );

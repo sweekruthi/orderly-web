@@ -28,6 +28,9 @@ const ChoreType = {
     OVERDUE: 'overdue'
 };
 
+const schURL = "http://127.0.0.1:8000/choremanagement/vew_individual_chore_schedule";
+const choreURL = "http://127.0.0.1:8000/choremanagement/get_chore_info";
+
 /*
     Displays all of the chores for a user on a given day.
  */

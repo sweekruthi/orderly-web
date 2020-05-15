@@ -40,13 +40,13 @@ class Home extends React.Component {
     }
 
     render() {
-        const accessToken = Cookies.get('access_token');
+        /*const accessToken = Cookies.get('access_token');
         if (!accessToken) {
             window.location.replace('/login');
             return null;
-        }
+        }*/
         return (<div className="App">
-            <p>Hi {this.state.user}!</p>
+            {/*<p>Hi {this.state.user}!</p>*/}
             <NavBar setPage={this.setPage} />
             {this.currTab()}
         </div>);

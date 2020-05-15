@@ -9,7 +9,7 @@ class HouseholdsList extends Component {
     }
 
     goToAddHousehold() {
-        this.props.setPage(<AddHousehold/>);
+        this.props.setPage(<AddHousehold setPage={this.props.setPage}/>);
     };
 
     handleClick(e) {

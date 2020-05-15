@@ -1,18 +1,25 @@
 import React, {Component} from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-class AddHouseNewMemberCircle extends Component {
+class NewMemberCircle extends Component {
     constructor(props) {
         super(props);
         this.state = {
             formDisplay: "none"
         };
-        this.addNew = this.addNew.bind(this);
+
+        this.toggleCircle = this.toggleCircle.bind(this);
         this.toggleFormDisplay = this.toggleFormDisplay.bind(this);
+        this.clickAdd = this.clickAdd.bind(this);
+        this.addNew = this.addNew.bind(this);
     }
 
-    toggleFormDisplay(e) {
-        e.currentTarget.classList.toggle('ahmn-circle-selected');
+    toggleCircle(circle) {
+        circle.classList.toggle('ahmn-circle-selected');
+        this.toggleFormDisplay();
+    }
+
+    toggleFormDisplay() {
         let newDisplay = 'none';
         if (this.state.formDisplay === 'none') {
             newDisplay = 'block';
@@ -24,24 +31,22 @@ class AddHouseNewMemberCircle extends Component {
         )
     }
 
+    clickAdd(e) {
+        this.toggleCircle(e.currentTarget);
+        this.toggleFormDisplay();
+    }
+
     addNew() {
-        let newDisplay = 'none';
-        if (this.state.formDisplay === 'none') {
-            newDisplay = 'block';
-        }
-        this.setState(
-            {
-                formDisplay: newDisplay
-            }
-        );
         this.props.addMember();
+        this.toggleCircle(document.getElementById('new-member-circle'));
+        this.toggleFormDisplay();
     }
 
 
     render() {
         return(
             <div>
-                <div id="new-mem" className={"add-house-new-member-circle"} onClick={this.toggleFormDisplay}>
+                <div id="new-member-circle" className={"add-house-new-member-circle"} onClick={this.clickAdd}>
                     <FaPlus className="ahmn-circle-plus" color="grey" size={30}/>
                 </div>
                 <div style={{display: this.state.formDisplay}}>
@@ -53,4 +58,4 @@ class AddHouseNewMemberCircle extends Component {
     }
 }
 
-export default AddHouseNewMemberCircle
+export default NewMemberCircle
