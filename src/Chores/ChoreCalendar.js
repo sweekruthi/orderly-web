@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import CalendarLine from "./CalendarLine";
 import ChoreCalendarBox from "./ChoreCalendarBox";
 
+/**
+ * Displays a days worth of chores in a calendar format.
+ */
 class ChoreCalendar extends Component {
     render() {
         const times = ["12:00 AM", " 1:00 AM", " 2:00 AM", " 3:00 AM", " 4:00 AM", " 5:00 AM", " 6:00 AM",

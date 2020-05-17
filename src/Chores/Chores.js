@@ -1,37 +1,19 @@
 import React, {Component} from 'react';
-
 import './Chores.css';
-
 import ChoreDate from "./ChoreDate";
 import DateForm from "./DateForm";
 import DayOfWeekPicker from "./DayOfWeekPicker";
 import ChoreTypeButtons from "./ChoreTypeButtons";
 import ChoreViewButtons from "./ChoreViewButtons";
-import HouseSelect from "./HouseSelect";
+import ColumnFilter from "./ColumnFilter";
 import ChoreCalendar from "./ChoreCalendar";
 import ChoreList from "./ChoreList";
+import * as URLS from "../App/URLStor";
+import * as ENUMS from "../App/EnumStor";
+import Schedule from "../Households/Schedule";
+import ScheduleButtons from "../Households/ScheduleButtons";
 
-/*
-    Used to specify what type view chores are displayed in
-*/
-const ChoreView = {
-    CALENDAR: 'calendar',
-    LIST: 'list'
-};
-
-/*
-    Used to specify what type of chore this page is displaying
-*/
-const ChoreType = {
-    UPCOMING: 'upcoming',
-    COMPLETED: 'completed',
-    OVERDUE: 'overdue'
-};
-
-const schURL = "http://127.0.0.1:8000/choremanagement/vew_individual_chore_schedule";
-const choreURL = "http://127.0.0.1:8000/choremanagement/get_chore_info";
-
-/*
+/**
     Displays all of the chores for a user on a given day.
  */
 class Chores extends Component {
@@ -41,8 +23,10 @@ class Chores extends Component {
         let initDate = new Date();
 
         this.state = {
-            choreView: ChoreView.CALENDAR,
-            choreType: ChoreType.UPCOMING,
+            schURL: this.props.schURL,
+            choreURL: URLS.CHORE_INFO_URL,
+            choreView: ENUMS.ChoreView.CALENDAR,
+            choreType: ENUMS.ChoreType.UPCOMING,
             viewPage: <ChoreCalendar/>,
             dow: initDate.getDay(),
             day: initDate.getDate(),
@@ -62,8 +46,14 @@ class Chores extends Component {
         this.setChoreView = this.setChoreView.bind(this);
     }
 
-    /*Functions for setting the current date*/
+    /******************************************************************************************************************/
+    /*                                         Functions for setting the current date                                 */
+    /******************************************************************************************************************/
 
+    /**
+     * Sets the day of the current date
+     * @param day
+     */
     setDay(day) {
         let newDate = new Date(this.state.year, this.state.month, this.state.day);
         newDate.setDate(day);
@@ -75,6 +65,10 @@ class Chores extends Component {
         );
     }
 
+    /**
+     * Sets the month of the current date
+     * @param month
+     */
     setMonth(month) {
         let newDate = new Date(this.state.year, this.state.month, this.state.day);
         newDate.setDate(1);
@@ -88,6 +82,10 @@ class Chores extends Component {
         );
     }
 
+    /**
+     * Sets the year of the current date
+     * @param year
+     */
     setYear(year) {
         let newDate = new Date(this.state.year, this.state.month, this.state.day);
         newDate.setYear(year);
@@ -99,12 +97,22 @@ class Chores extends Component {
         );
     }
 
-    /*Functions for moving the date forward/backwards a set number of days/weeks/months etc..*/
+    /******************************************************************************************************************/
+    /*             Functions for moving the date forward/backwards a set number of days/weeks/months etc..            */
+    /******************************************************************************************************************/
 
+    /**
+     * @param numDays Moves the date forwards or backwards by the specified number of days depending on whether
+     * numDays is positive or negative.
+     */
     moveDay(numDays) {
         this.moveDate(numDays, 1);
     }
 
+    /**
+     * @param numWeeks Moves the date forwards or backwards by the specified number of weeks depending on whether
+     * numDays is positive or negative.
+     */
     moveWeek(numWeeks) {
         this.moveDate(numWeeks, 7);
     }
@@ -122,7 +130,9 @@ class Chores extends Component {
         );
     }
 
-    /*Functions for setting the type of chores to be displayed, and the view in which to display them*/
+    /******************************************************************************************************************/
+    /*        Functions for setting the type of chores to be displayed, and the view in which to display them         */
+    /******************************************************************************************************************/
 
     setChoreType(type) {
         this.setState(
@@ -134,7 +144,7 @@ class Chores extends Component {
 
     setChoreView(view) {
         let viewPage = <ChoreCalendar/>;
-        if (view === ChoreView.LIST) {
+        if (view === ENUMS.ChoreView.LIST) {
             viewPage = <ChoreList/>
         }
         this.setState(
@@ -157,12 +167,14 @@ class Chores extends Component {
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
-                    <HouseSelect choreView={this.state.choreView}/>
+                    <ColumnFilter columnIcon={this.props.columnIcon} columnStart={this.props.columnStart}
+                                  choreView={this.state.choreView}/>
                     {this.state.viewPage}
                 </div>
 
                 <div id="right-column">
                     <ChoreViewButtons initView={this.state.choreView} setChoreView={this.setChoreView}/>
+                    {this.props.scheduleAddOn}
                 </div>
             </div>
         );

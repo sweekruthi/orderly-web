@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import ChoreListBox from "./ChoreListBox";
 
+/**
+ * Displays a days worth of chores in a list format.
+ */
 class ChoreList extends Component {
     render() {
         return(

@@ -6,6 +6,10 @@ const lineStyle = {
     marginBottom: "1em"
 };
 
+/**
+ * Returns A single line found within the ChoreCalendar view. Contains a time given on the left hand side, followed
+ * by a horizontal line.
+ */
 function CalendarLine(props) {
     return (
         <div style={lineStyle}>

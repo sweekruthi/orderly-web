@@ -62,11 +62,11 @@ class NewMemberCircle extends Component {
     render() {
         return(
             <div>
-                <div id="new-member-circle" className={"add-house-new-member-circle"} onClick={this.clickAdd}>
-                    <FaPlus className="ahmn-circle-plus" color="grey" size={30}/>
+                <div id="new-member-circle" className={"member-circle"} style={{fontSize: this.props.circleSize}} onClick={this.clickAdd}>
+                    <FaPlus className="ahmn-circle-plus" style={{fontSize: this.props.circleSize}} color="grey" size={30}/>
                 </div>
                 <div style={{display: this.state.formDisplay}}>
-                    <input id = "new-member" className="add-house-new-member-form" type="text" style={{display: "inline"}}/>
+                    <input id ="new-member" className="add-house-new-member-form" type="text" style={{display: "inline"}}/>
                     <button id="ahnm-submit" style={{display: "inline"}} onClick={this.addNew}>Add</button>
                 </div>
             </div>

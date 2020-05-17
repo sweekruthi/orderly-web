@@ -10,7 +10,7 @@ class HouseholdViewer extends Component {
         return(
             <div id="household-viewer">
                 <HouseholdsList setPage={this.props.setPage}/>
-                <HouseholdsDetails/>
+                <HouseholdsDetails setPage={this.props.setPage}/>
             </div>
         );
     }

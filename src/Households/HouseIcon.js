@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import { FaHome } from 'react-icons/fa';
 
 /**
- * Displays a portrait for the user
+ * Displays an icon for a household
  */
-class MemberCircle extends Component {
+class HouseIcon extends Component {
     constructor(props) {
         super(props);
     }
@@ -11,11 +12,11 @@ class MemberCircle extends Component {
     render() {
         return(
             <div>
-                <div className={"member-circle"} style={{fontSize: this.props.circleSize}}/>
+                <div><FaHome size={this.props.iconSize}/></div>
                 <div className={"member-circle-name"} style={{fontSize: this.props.nameSize}}>{this.props.member}</div>
             </div>
         );
     }
 }
 
-export default MemberCircle
+export default HouseIcon

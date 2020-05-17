@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 
+/**
+ * A box for displaying a single chore within the Calendar view.
+ */
 class ChoreListBox extends Component {
     constructor(props) {
         super(props);
@@ -9,6 +12,9 @@ class ChoreListBox extends Component {
         this.toggleDescDisplay = this.toggleDescDisplay.bind(this);
     }
 
+    /**
+     * Toggles the display of the drop down element showing the description of a chore.
+     */
     toggleDescDisplay(e) {
         e.target.classList.toggle('clb-desc-button-selected');
         let newDisplay = 'none';

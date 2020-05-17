@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import * as URLS from "../App/URLStor"
 import Households from "../Households/Households";
 import NavBar from "./NavBar";
 import Notifications from '../Notifications/Notifications';
@@ -8,6 +9,9 @@ import Cookies from 'js-cookie';
 import Chores from '../Chores/Chores';
 import { access } from 'fs';
 import { navigate } from '@reach/router';
+import { FaHome } from 'react-icons/fa';
+import HouseIcon from "../Households/HouseIcon";
+
 
 class Home extends React.Component {
     constructor(props) {
@@ -29,9 +33,9 @@ class Home extends React.Component {
     currTab() {
         switch (this.state.page) {
             case "households":
-                return <Households />;
+                return <Households/>;
             case "chores":
-                return <Chores />;
+                return <Chores schURL={URLS.IND_SCH_URL} columnIcon={<HouseIcon iconSize={40} nameSize="14pt"/>} columnStart={8}/>;
             case "notifications":
                 return <Notifications />;
             default:

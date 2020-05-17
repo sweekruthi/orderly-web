@@ -65,8 +65,7 @@
     flex-direction: row;
 }
 
-.house-details-member-circle {
-    font-size: 36pt;
+.member-circle {
     width: 2em;
     height: 2em;
     margin-left: 1em;
@@ -74,8 +73,7 @@
     border-radius: 50%;
 }
 
-.hdm-circle-name {
-    font-size: 14pt;
+.member-circle-name {
     text-align: center;
     height: 1.2em;
     width: 5.14em;
@@ -125,6 +123,10 @@
     flex-basis: 33%;
 }
 
+#new-member-circle:hover {
+    background-color: lightgrey;
+}
+
 #add-house-title-form {
     font-size: 36pt;
     height: 1.2em;
@@ -138,19 +140,6 @@
 
 #add-house-title-form:focus {
     outline: none;
-}
-
-.add-house-new-member-circle {
-    font-size: 36pt;
-    width: 2em;
-    height: 2em;
-    margin-left: 1em;
-    border: solid 2px lightgrey;
-    border-radius: 50%;
-}
-
-.add-house-new-member-circle:hover {
-    background-color: lightgrey;
 }
 
 .ahmn-circle-selected {
