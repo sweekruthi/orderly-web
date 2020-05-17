@@ -50,7 +50,7 @@ class Home extends React.Component {
             return null;
         }
         return (<div className="App">
-            <p>Hi {this.state.user}!</p>
+            {/*<p>Hi {this.state.user}!</p>*/}
             <NavBar setPage={this.setPage} />
             {this.currTab()}
         </div>);
