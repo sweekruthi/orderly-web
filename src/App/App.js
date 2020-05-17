@@ -9,11 +9,10 @@ class App extends React.Component{
         return (
             <div className="App">
                 <h1 id="heading">Orderly</h1>
-                <Home path="home"/>
                 <Router>
-                    {/*<Login path="/"/>
+                    <Login path="/"/>
                     <Home path="home"/>
-                    <Login path="login"/>*/}
+                    <Login path="login"/>
                 </Router>
             </div>
         );
