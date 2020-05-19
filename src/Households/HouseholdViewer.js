@@ -8,7 +8,7 @@ import HouseholdsDetails from "./HouseholdsDetails";
 class HouseholdViewer extends Component {
     render() {
         return(
-            <div id="household-viewer">
+            <div className="household-viewer">
                 <HouseholdsList setPage={this.props.setPage}/>
                 <HouseholdsDetails setPage={this.props.setPage}/>
             </div>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Chores.css';
+import '../Households/Households.css'
 import ChoreDate from "./ChoreDate";
 import DateForm from "./DateForm";
 import DayOfWeekPicker from "./DayOfWeekPicker";
@@ -10,8 +11,6 @@ import ChoreCalendar from "./ChoreCalendar";
 import ChoreList from "./ChoreList";
 import * as URLS from "../App/URLStor";
 import * as ENUMS from "../App/EnumStor";
-import Schedule from "../Households/Schedule";
-import ScheduleButtons from "../Households/ScheduleButtons";
 
 /**
     Displays all of the chores for a user on a given day.
@@ -167,8 +166,7 @@ class Chores extends Component {
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
-                    <ColumnFilter columnIcon={this.props.columnIcon} columnStart={this.props.columnStart}
-                                  choreView={this.state.choreView}/>
+                    <ColumnFilter iconType={this.props.iconType} choreView={this.state.choreView}/>
                     {this.state.viewPage}
                 </div>
 

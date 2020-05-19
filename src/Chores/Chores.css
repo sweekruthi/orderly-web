@@ -113,11 +113,15 @@
     border-radius: .5em;
 }
 
-.column-button-list:hover {
-    background-color: lightgrey;
+.icon-name {
+    width: max-content;
 }
 
 .column-button-list-selected {
+    background-color: lightgrey !important;
+}
+
+.column-button-list:hover {
     background-color: lightgrey;
 }
 

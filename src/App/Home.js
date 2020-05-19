@@ -35,7 +35,7 @@ class Home extends React.Component {
             case "households":
                 return <Households/>;
             case "chores":
-                return <Chores schURL={URLS.IND_SCH_URL} columnIcon={<HouseIcon iconSize={40} nameSize="14pt"/>} columnStart={8}/>;
+                return <Chores schURL={URLS.IND_SCH_URL} iconType={'house'}/>;
             case "notifications":
                 return <Notifications />;
             default:

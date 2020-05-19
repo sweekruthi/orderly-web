@@ -13,8 +13,8 @@ class Schedule extends Component {
     render() {
         return(
             <div>
-                <Chores schURL={URLS.HOUSE_SCH_URL} columnIcon={<MemberCircle circleSize={"15pt"} nameSize={"14pt"}/>}
-                        columnStart={6.5} scheduleAddOn={<ScheduleButtons setPage={this.props.setPage}/>}/>
+                <Chores schURL={URLS.HOUSE_SCH_URL} iconType={'member'}
+                        scheduleAddOn={<ScheduleButtons setPage={this.props.setPage}/>}/>
             </div>
         )
     }

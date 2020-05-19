@@ -11,6 +11,9 @@ import MemberCircle from "./MemberCircle";
 class HouseholdsDetails extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            members: ['member 1', 'member 2']
+        };
         this.goToSchedule = this.goToSchedule.bind(this);
     }
 
@@ -20,13 +23,13 @@ class HouseholdsDetails extends Component {
 
     render() {
         return (
-            <div id="house-details">
+            <div className="house-details">
                 <div id="house-details-title">UW Dorm</div>
                 <div id="house-details-members-title">Members</div>
                 <hr className="house-details-linebreak"/>
                 <div id="house-details-members-list">
-                    <MemberCircle circleSize="36pt" nameSize="14pt"/>
-                    <MemberCircle circleSize="36pt" nameSize="14pt"/>
+                    {this.state.members.map((value) =>
+                    {return <MemberCircle member={value} memberSpacing='house-details-member' circleSize="36pt" nameSize="14pt"/>})}
                 </div>
                 <hr className="house-details-linebreak"/>
                 <div className="house-details-nav-away">

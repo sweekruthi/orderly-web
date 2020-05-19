@@ -5,15 +5,13 @@ import { FaHome } from 'react-icons/fa';
  * Displays an icon for a household
  */
 class HouseIcon extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return(
-            <div>
-                <div><FaHome size={this.props.iconSize}/></div>
-                <div className={"member-circle-name"} style={{fontSize: this.props.nameSize}}>{this.props.member}</div>
+            <div className='house-icon' style={this.props.iconPos}>
+                <button onClick={this.props.onClick} className={this.props.iconClass}>
+                    <FaHome size={this.props.iconSize}/>
+                </button>
+                <div className='icon-name' style={{fontSize: this.props.nameSize}}>{this.props.houseName}</div><br/>
             </div>
         );
     }
