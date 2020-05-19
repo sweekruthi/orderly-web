@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import HouseIcon from "../Households/HouseIcon";
+import MemberIcon from "../Households/MemberIcon";
 
 /**
  * A row of icons used for filtering chores by a group.  When in calendar view these simply serve
@@ -8,8 +10,12 @@ import React, {Component} from 'react';
 class ColumnFilter extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            iconNames: ["ho", "house22222", "house 3"]
+        };
         this.toggleButton = this.toggleButton.bind(this);
         this.buttonPosition = this.buttonPosition.bind(this);
+        this.createIcon = this.createIcon.bind(this);
     }
 
     /**
@@ -17,8 +23,8 @@ class ColumnFilter extends Component {
      * on.
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.choreView === 'list' && document.querySelector('.column-button-list-selected') == null) {
-            document.querySelector('#house-init').classList.add('column-button-list-selected');
+        if (this.props.choreView === 'list') {
+            document.querySelector('.column-button-list').classList.add('column-button-list-selected');
         }
     }
 
@@ -35,26 +41,34 @@ class ColumnFilter extends Component {
     /**
      * Calculates a button position based off of its index.
      * @param index the buttons position within the ColumnFilter
+     * @param columnStart The amount of offset to give the initial icon
      */
-    buttonPosition(index) {
+    buttonPosition(index, columnStart) {
         const style = {
             position: 'relative',
+            float: 'left',
             width: '4em',
-            left: (this.props.columnStart + 5 * index) + 'em'
+            left: (columnStart + 5 * index) + 'em'
         };
 
         return style;
     }
 
+    createIcon(value, index) {
+        if (this.props.iconType === 'house') {
+            return <HouseIcon iconClass={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
+                              onClick={this.toggleButton} iconSize={40} nameSize="14pt" houseName={value}/>
+        } else if (this.props.iconType === 'member') {
+            return <MemberIcon className={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
+                               onClick={this.toggleButton} member={value}/>
+        }
+    }
+
     render() {
         return(
           <div id='column-filter'>
-                <button id='house-init' className={'column-button-' + this.props.choreView} style={this.buttonPosition(0)}
-                        onClick={this.toggleButton}>{this.props.columnIcon}</button>
-                <button className={'column-button-' + this.props.choreView} style={this.buttonPosition(1)}
-                        onClick={this.toggleButton}>{this.props.columnIcon}</button>
-                <button className={'column-button-' + this.props.choreView} style={this.buttonPosition(2)}
-                        onClick={this.toggleButton}>{this.props.columnIcon}</button>
+              {this.state.iconNames.map((value, index) => {
+                  return this.createIcon(value, index)})}
           </div>
         );
     }

@@ -7,8 +7,24 @@ import AddHousehold from "./AddHousehold";
 class HouseholdsList extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            houses: ["home 1", "home 2"]
+        };
+
+        this.displayHouseInfo = this.displayHouseInfo.bind(this);
         this.goToAddHousehold = this.goToAddHousehold.bind(this);
         this.toggleHouseButton = this.toggleHouseButton.bind(this);
+    }
+
+    componentDidMount() {
+        document.querySelector('.house-button').classList.add('house-button-selected');
+    }
+
+    /**
+     * Grabs and displays info related to a household.
+     */
+    displayHouseInfo() {
+
     }
 
     /**
@@ -28,8 +44,9 @@ class HouseholdsList extends Component {
 
     render() {
         return (
-            <div id="house-list">
-                <button className="house-button">UW dorm</button>
+            <div className="house-list">
+                {this.state.houses.map((value) => {
+                    return <button className="house-button" onClick={this.displayHouseInfo}>{value}</button>})}
                 <button className="house-button" onClick={this.goToAddHousehold}>Add household</button>
             </div>
         )

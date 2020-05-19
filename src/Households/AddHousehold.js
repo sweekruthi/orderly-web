@@ -51,8 +51,8 @@ class AddHousehold extends Component {
                     <hr className="house-details-linebreak"/>
                     <div id="house-details-members-list">
                         {this.state.members.map((value) => {
-                            return <MemberCircle circleSize="36pt" nameSize="14pt" member={value}/>})}
-                        <NewMemberCircle circleSize="36pt" nameSize="14pt" addMember={this.addMember}/>
+                            return <MemberCircle memberSpacing='house-details-member' circleSize="36pt" nameSize="14pt" member={value}/>})}
+                        <NewMemberCircle memberSpacing='house-details-member' circleSize="36pt" nameSize="14pt" addMember={this.addMember}/>
                     </div>
                     <hr className="house-details-linebreak"/>
                     <button id="add-house-submit" onClick={this.addHousehold}>Create House</button>

@@ -10,8 +10,8 @@ class MemberCircle extends Component {
 
     render() {
         return(
-            <div>
-                <div className={"member-circle"} style={{fontSize: this.props.circleSize}}/>
+            <div className={this.props.memberSpacing}>
+                <div class={'member-circle ' + this.props.className} style={{fontSize: this.props.circleSize}} onClick={this.props.onClick}/>
                 <div className={"member-circle-name"} style={{fontSize: this.props.nameSize}}>{this.props.member}</div>
             </div>
         );

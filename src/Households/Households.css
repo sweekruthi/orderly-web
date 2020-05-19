@@ -1,4 +1,4 @@
-#household-viewer {
+.household-viewer {
     display: flex;
     flex-direction: row;
 }
@@ -7,7 +7,7 @@
 /*                                              Households List                                                      */
 /*********************************************************************************************************************/
 
-#house-list {
+.house-list {
     display: flex;
     flex-direction: column;
     flex-basis: 33%;
@@ -22,6 +22,7 @@
     background-color: transparent;
     border: solid 1px lightgrey;
     border-radius: 0 4em 4em 0;
+    outline: none;
 }
 .house-button:hover {
     background-color: lightgrey;
@@ -31,17 +32,16 @@
     background-color: lightgrey;
 }
 
-
 /*********************************************************************************************************************/
 /*                                              Households Details                                                   */
 /*********************************************************************************************************************/
 
-#house-details {
+.house-details {
     flex-basis: 67%;
 }
 
 .house-details-linebreak {
-    width: 99%;
+    width: 230%;
     right: 0;
     border: solid 1px lightgrey;
 }
@@ -65,20 +65,23 @@
     flex-direction: row;
 }
 
+.house-details-member {
+    width: max-content;
+    text-align: center;
+    display: inline-block;
+    margin-left: 3em;
+}
+
 .member-circle {
     width: 2em;
     height: 2em;
-    margin-left: 1em;
-    border: solid 2px lightgrey;
-    border-radius: 50%;
+    border: solid 2px lightgrey !important;
+    border-radius: 50% !important;
 }
 
 .member-circle-name {
-    text-align: center;
     height: 1.2em;
-    width: 5.14em;
-    top: .15em;
-    margin-left: 2.57em;
+    top: .3em;
 }
 
 .house-details-nav-away {
@@ -95,6 +98,7 @@
     margin-left: 1em;
     flex-basis: 80%;
 }
+
 .house-details-nav-button {
     border: none;
     background-color: transparent;
@@ -123,6 +127,10 @@
     flex-basis: 33%;
 }
 
+#new-member-circle {
+    vertical-align: center;
+}
+
 #new-member-circle:hover {
     background-color: lightgrey;
 }
@@ -142,29 +150,26 @@
     outline: none;
 }
 
-.ahmn-circle-selected {
+.nm-circle-selected {
     background-color: lightgrey;
 }
 
-.ahmn-circle-plus {
-    height: .6em;
-    width: .6em;
-    margin-left: .65em;
-    margin-top: .65em;
+.nm-circle-plus {
+    height: 100%;
+    width: 32%;
 }
 
-.add-house-new-member-form {
+.nm-form {
     font-size: 14pt;
     height: 1.4em;
     width: 5.14em;
     line-height: 1.6;
     padding-top: .2em;
-    margin-left: 2.57em;
     margin-top: .2em;
     outline: none;
 }
 
-#ahnm-submit {
+#nm-submit {
     font-size: 14pt;
     display: inline;
     position: relative;
@@ -176,7 +181,7 @@
     outline: none;
 }
 
-#ahnm-submit:hover {
+#nm-submit:hover {
     background-color: lightgrey;
 }
 
@@ -196,4 +201,7 @@
     background-color: lightgrey;
 }
 
+/*********************************************************************************************************************/
+/*                                                Add Chores                                                         */
+/*********************************************************************************************************************/
 

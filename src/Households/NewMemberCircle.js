@@ -61,13 +61,13 @@ class NewMemberCircle extends Component {
 
     render() {
         return(
-            <div>
+            <div className={this.props.memberSpacing}>
                 <div id="new-member-circle" className={"member-circle"} style={{fontSize: this.props.circleSize}} onClick={this.clickAdd}>
-                    <FaPlus className="ahmn-circle-plus" style={{fontSize: this.props.circleSize}} color="grey" size={30}/>
+                    <FaPlus className="nm-circle-plus" color="grey"/>
                 </div>
                 <div style={{display: this.state.formDisplay}}>
-                    <input id ="new-member" className="add-house-new-member-form" type="text" style={{display: "inline"}}/>
-                    <button id="ahnm-submit" style={{display: "inline"}} onClick={this.addNew}>Add</button>
+                    <input id ="new-member" className="nm-form" type="text" style={{display: "inline"}}/>
+                    <button id="nm-submit" style={{display: "inline"}} onClick={this.addNew}>Add</button>
                 </div>
             </div>
         );
