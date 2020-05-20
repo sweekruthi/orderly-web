@@ -21,12 +21,13 @@ class ChoreCalendar extends Component {
 
     createChoreBoxes() {
         let choreBoxes = [];
-        let index = 0;
+        let houseIndex = 0;
         for (let house in this.props.chores) {
             let houseChores = this.props.chores[house];
             for (let i = 0; i < houseChores.length; i++) {
-                choreBoxes.push(<ChoreCalendarBox choreTitle={houseChores[i].title} row={i} column={index}/>);
+                choreBoxes.push(<ChoreCalendarBox choreTitle={houseChores[i].title} row={i} column={houseIndex}/>)
             }
+            houseIndex++;
         }
 
         return choreBoxes;

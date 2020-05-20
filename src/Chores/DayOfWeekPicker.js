@@ -10,24 +10,17 @@ class DayOfWeekPicker extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            dow: ["S", "M", "T", "W", "Th", "F", "S"],
+            dowRefs: [React.createRef(), React.createRef(), React.createRef(), React.createRef(), React.createRef(), React.createRef(),
+                React.createRef()]
         };
-        this.sundayRef = React.createRef();
-        this.mondayRef = React.createRef();
-        this.tuesdayRef = React.createRef();
-        this.wednesdayRef = React.createRef();
-        this.thursdayRef = React.createRef();
-        this.fridayRef = React.createRef();
-        this.saturdayRef = React.createRef();
     }
 
     /**
      * Select the initial dow button.
      */
     componentDidMount() {
-        let dowArr = [this.sundayRef, this.mondayRef, this.tuesdayRef, this.wednesdayRef, this.thursdayRef,
-            this.fridayRef, this.saturdayRef];
-        dowArr[this.props.initDay].current.classList.add('dow-selected');
+        this.state.dowRefs[this.props.initDay].current.classList.add('dow-selected');
     }
 
     /**
@@ -35,10 +28,8 @@ class DayOfWeekPicker extends Component {
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.initDay !== this.props.initDay) {
-            let dowArr = [this.sundayRef, this.mondayRef, this.tuesdayRef, this.wednesdayRef, this.thursdayRef,
-                this.fridayRef, this.saturdayRef];
             document.querySelector('.dow-selected').classList.remove('dow-selected');
-            dowArr[this.props.initDay].current.classList.add('dow-selected');
+            this.state.dowRefs[this.props.initDay].current.classList.add('dow-selected');
         }
     }
 
@@ -55,23 +46,11 @@ class DayOfWeekPicker extends Component {
         return (
             <div>
                 <ul id="dow-picker">
-                    <button className="dow-button" onClick={() => this.props.onChevronClick(-1)}>
+                    <button className="dow-button-chevron" onClick={() => this.props.onChevronClick(-1)}>
                         <FaChevronLeft className="dow-chevron" size={45}/></button>
-                    <button className="dow-button" ref={this.sundayRef} onClick={(e) =>
-                        this.changeDow(e, 0, this.props.onDayClick)}>S</button>
-                    <button className="dow-button" ref={this.mondayRef} onClick={(e) =>
-                        this.changeDow(e, 1, this.props.onDayClick)}>M</button>
-                    <button className="dow-button" ref={this.tuesdayRef} onClick={(e) =>
-                        this.changeDow(e, 2, this.props.onDayClick)}>T</button>
-                    <button className="dow-button" ref={this.wednesdayRef} onClick={(e) =>
-                        this.changeDow(e, 3, this.props.onDayClick)}>W</button>
-                    <button className="dow-button" ref={this.thursdayRef} onClick={(e) =>
-                        this.changeDow(e, 4, this.props.onDayClick)}>Th</button>
-                    <button className="dow-button" ref={this.fridayRef} onClick={(e) =>
-                        this.changeDow(e, 5, this.props.onDayClick)}>F</button>
-                    <button className="dow-button" ref={this.saturdayRef} onClick={(e) =>
-                        this.changeDow(e, 6, this.props.onDayClick)}>S</button>
-                    <button className="dow-button" onClick={() => this.props.onChevronClick(1)}>
+                    {this.state.dow.map((value, index) =>
+                    {return <button className="dow-button" ref={this.state.dowRefs[index]}>{value}</button>})}
+                    <button className="dow-button-chevron" onClick={() => this.props.onChevronClick(1)}>
                         <FaChevronRight className="dow-chevron" size={45}/></button>
                 </ul>
             </div>

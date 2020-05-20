@@ -21,13 +21,30 @@ class Chores extends Component {
     constructor(props) {
         super(props);
         let initDate = new Date();
+        let weekStart = new Date();
+        let weekEnd = new Date();
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        weekEnd.setDate(weekEnd.getDate() + (6 - weekEnd.getDay()));
+
+        this.getHouses = this.getHouses.bind(this);
+        this.getChores = this.getChores.bind(this);
+        this.setupChoreView = this.setupChoreView.bind(this);
+
+        let houses = this.getHouses();
+        let chores = this.getChores(houses);
+        let initIcon = houses[0];
 
         this.state = {
             schURL: this.props.schURL,
             choreURL: URLS.CHORE_INFO_URL,
-            chores:  {},
             choreView: ENUMS.ChoreView.CALENDAR,
             choreType: ENUMS.ChoreType.UPCOMING,
+            chores: chores,
+            houses: houses,
+            viewPage: this.setupChoreView(ENUMS.ChoreView.CALENDAR, chores, initIcon),
+            selectedIcon: initIcon,
+            weekStart: weekStart,
+            weekEnd: weekEnd,
             dow: initDate.getDay(),
             day: initDate.getDate(),
             month: initDate.getMonth(),
@@ -36,7 +53,6 @@ class Chores extends Component {
                 "October", "November", "December"]
         };
 
-        this.getChores = this.getChores.bind(this);
         this.setDay = this.setDay.bind(this);
         this.setMonth = this.setMonth.bind(this);
         this.setYear = this.setYear.bind(this);
@@ -45,40 +61,69 @@ class Chores extends Component {
         this.moveDate = this.moveDate.bind(this);
         this.setChoreType = this.setChoreType.bind(this);
         this.setChoreView = this.setChoreView.bind(this);
-    }
+        this.setSelectedIcon = this.setSelectedIcon.bind(this);
 
-    componentDidMount() {
-        this.getChores();
     }
 
     /******************************************************************************************************************/
     /*                                         Functions for retrieving data from backend                             */
     /******************************************************************************************************************/
 
-    getChores() {
-        let Chore1 = new OBJECTS.Chore("", "Vacuum", "", "", "");
-        let Chore2 = new OBJECTS.Chore("", "Dishes", "", "", "");
-
-        let chores = {
-            "house 1" : [Chore1, Chore2]
-        };
-        /*Make an api call to view_individual_chore_schedule. stores the chore id's in chore state.
-         *For each chore id, make an api call to get_chore_info.  Sort chores based on their house id.  Package
-         * everything into a dictionary where keys are house id's and values are chore objects.  Set view page to
-         * appropriate view while passing down the dictionary of chores down as a prop.
-         */
-        let view = <div/>;
-        if (this.state.choreView === ENUMS.ChoreView.CALENDAR) {
-            view = <ChoreCalendar chores={chores}/>;
-        } else {
-            view = <ChoreList chores={chores}/>;
+    getHouses() {
+        /*Make an api call to view_individual_houses.*/
+        let houses = ['house 1', 'house 2', 'house 3'];
+        let selectedIcon = '';
+        if (houses.length !== 0) {
+            selectedIcon = houses[0];
         }
 
         this.setState(
             {
-                viewPage: view
+                selectedIcon: selectedIcon,
+                houses: houses
             }
-        )
+        );
+
+        return houses;
+    }
+
+    getChores(houses) {
+        let Chore1 = new OBJECTS.Chore("", "house 1","Vacuum", "", "", "");
+        let Chore2 = new OBJECTS.Chore("", "house 1","Dishes", "", "", "");
+        let Chore3 = new OBJECTS.Chore("", "house 2","Clean Bed", "", "", "");
+        let Chore4 = new OBJECTS.Chore("", "house 3","Sweep", "", "", "");
+
+        let houseNames = ['house_1', 'house_2', 'house_3'];
+
+        let chores = {};
+        chores['house 1'] = [Chore1, Chore2];
+        chores['house 2'] = [Chore3];
+        chores['house 3'] = [Chore4];
+
+        /*For each house id make a call to get the houses name, schedule_start,
+        * and num weeks.  Calculate the current week the houses schedule is on by finding the difference in weeks between
+        * the start date and today's date, and modding by the houses num weeks. Make a call to view_individual_chores, passing
+        * in a house_id and num_week. create a new entry in chores with the key equal to the house name and values equal to the
+        * chore id's.*/
+
+        this.setState(
+            {
+                chores: chores
+            }
+        );
+
+        return chores;
+    }
+
+    setupChoreView(choreView, chores, initIcon) {
+        let viewPage = <div/>;
+        if (choreView === ENUMS.ChoreView.CALENDAR) {
+            viewPage = <ChoreCalendar chores={chores}/>
+        } else {
+            viewPage = <ChoreList chores={chores} selectedIcon={initIcon}/>
+        }
+
+        return viewPage;
     }
 
 
@@ -155,13 +200,19 @@ class Chores extends Component {
 
     moveDate(numMoves, step) {
         let newDate = new Date(this.state.year, this.state.month, this.state.day);
+        let newStart = new Date();
+        let newEnd = new Date();
         newDate.setDate(newDate.getDate() + numMoves * step);
+        newStart.setDate(newDate.getDate() - newDate.getDay());
+        newEnd.setDate(newDate.getDate() + (6 - newDate.getDay()));
         this.setState(
             {
                 dow: newDate.getDay(),
                 day: newDate.getDate(),
                 month: newDate.getMonth(),
-                year: newDate.getFullYear()
+                year: newDate.getFullYear(),
+                weekStart: newStart,
+                weekEnd: newEnd
             }
         );
     }
@@ -179,14 +230,19 @@ class Chores extends Component {
     }
 
     setChoreView(view) {
-        let viewPage = <ChoreCalendar/>;
-        if (view === ENUMS.ChoreView.LIST) {
-            viewPage = <ChoreList/>
-        }
         this.setState(
             {
                 choreView: view,
-                viewPage: viewPage
+                viewPage: this.setupChoreView(view, this.state.chores, this.state.houses[0])
+            }
+        );
+    }
+
+    setSelectedIcon(selectedIcon) {
+        this.setState(
+            {
+                selectedIcon: selectedIcon,
+                viewPage: this.setupChoreView(this.state.choreView, this.state.chores, selectedIcon)
             }
         );
     }
@@ -195,15 +251,14 @@ class Chores extends Component {
         return (
             <div id="chores">
                 <div id="left-column">
-                    <ChoreDate day={this.state.day} month={this.state.monthNames[this.state.month]} year={this.state.year}/>
-                    <DateForm label="Month" changeDate={(m) => this.setMonth(m-1)} start={this.state.month + 1} max="12" min="1"/>
-                    <DateForm label="Year" changeDate={(y) => this.setYear(y)} start={this.state.year} max="10000" min="1"/>
+                    <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
                     <ChoreTypeButtons initType={this.state.choreType} setChoreType={this.setChoreType}/>
                 </div>
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
-                    <ColumnFilter iconType={this.props.iconType} iconNames={["house 1", "house 2"]} choreView={this.state.choreView}/>
+                    <ColumnFilter iconType={this.props.iconType} iconNames={this.state.houses} selectIcon={this.setSelectedIcon}
+                                  choreView={this.state.choreView}/>
                     {this.state.viewPage}
                 </div>
 

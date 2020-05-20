@@ -13,12 +13,10 @@ class ChoreList extends Component {
 
     createChoreBoxes() {
         let choreBoxes = [];
-        for (let house in this.props.chores) {
-            let houseChores = this.props.chores[house];
-            for (let i = 0; i < houseChores.length; i++) {
-                choreBoxes.push(<ChoreListBox title={houseChores[i].title} supplies={houseChores[i].supplies}
-                                              description={houseChores[i].description}/>);
-            }
+        let houseChores = this.props.chores[this.props.selectedIcon];
+        for (let i = 0; i < houseChores.length; i++) {
+            choreBoxes.push(<ChoreListBox title={houseChores[i].title} supplies={houseChores[i].supplies}
+                                          description={houseChores[i].description}/>);
         }
 
         return choreBoxes;

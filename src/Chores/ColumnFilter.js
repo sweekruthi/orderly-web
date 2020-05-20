@@ -20,7 +20,7 @@ class ColumnFilter extends Component {
      * on.
      */
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.choreView === 'list') {
+        if (prevProps.choreView !== 'list' && this.props.choreView === 'list') {
             document.querySelector('.column-button-list').classList.add('column-button-list-selected');
         }
     }
@@ -28,11 +28,12 @@ class ColumnFilter extends Component {
     /**
      * Toggles the selected button on and the previously selected button off.
      */
-    toggleButton(e) {
+    toggleButton(e, selectedIcon) {
         if (this.props.choreView === 'list') {
             document.querySelector('.column-button-list-selected').classList.remove('column-button-list-selected');
             e.currentTarget.classList.add('column-button-list-selected');
         }
+        this.props.selectIcon(selectedIcon);
     }
 
     /**
