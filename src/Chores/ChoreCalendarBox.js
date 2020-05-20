@@ -17,10 +17,10 @@ class ChoreCalendarBox extends Component {
      */
     boxPosition() {
         const style = {
-            height: (2 * this.props.duration) + "em",
+            height: "2em",
             width: "9em",
-            left: (5.5 + 9 * this.props.index) + "em",
-            top: (.7 + 2 * this.props.hour) + "em"
+            left: (5.5 + 9 * this.props.column) + "em",
+            top: (.7 + 2 * this.props.row) + "em"
         };
 
         return style;

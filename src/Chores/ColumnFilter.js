@@ -10,9 +10,6 @@ import MemberIcon from "../Households/MemberIcon";
 class ColumnFilter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            iconNames: ["ho", "house22222", "house 3"]
-        };
         this.toggleButton = this.toggleButton.bind(this);
         this.buttonPosition = this.buttonPosition.bind(this);
         this.createIcon = this.createIcon.bind(this);
@@ -67,7 +64,7 @@ class ColumnFilter extends Component {
     render() {
         return(
           <div id='column-filter'>
-              {this.state.iconNames.map((value, index) => {
+              {this.props.iconNames.map((value, index) => {
                   return this.createIcon(value, index)})}
           </div>
         );
