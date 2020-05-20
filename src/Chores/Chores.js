@@ -12,6 +12,7 @@ import ChoreList from "./ChoreList";
 import * as URLS from "../App/URLStor";
 import * as ENUMS from "../App/EnumStor";
 import * as OBJECTS from "../App/ObjectStor";
+import ChoreViewPage from "./ChoreViewPage";
 
 /**
     Displays all of the chores for a user on a given day.
@@ -28,7 +29,6 @@ class Chores extends Component {
 
         this.getHouses = this.getHouses.bind(this);
         this.getChores = this.getChores.bind(this);
-        this.setupChoreView = this.setupChoreView.bind(this);
 
         let houses = this.getHouses();
         let chores = this.getChores(houses);
@@ -41,7 +41,6 @@ class Chores extends Component {
             choreType: ENUMS.ChoreType.UPCOMING,
             chores: chores,
             houses: houses,
-            viewPage: this.setupChoreView(ENUMS.ChoreView.CALENDAR, chores, initIcon),
             selectedIcon: initIcon,
             weekStart: weekStart,
             weekEnd: weekEnd,
@@ -114,18 +113,6 @@ class Chores extends Component {
 
         return chores;
     }
-
-    setupChoreView(choreView, chores, initIcon) {
-        let viewPage = <div/>;
-        if (choreView === ENUMS.ChoreView.CALENDAR) {
-            viewPage = <ChoreCalendar chores={chores}/>
-        } else {
-            viewPage = <ChoreList chores={chores} selectedIcon={initIcon}/>
-        }
-
-        return viewPage;
-    }
-
 
     /******************************************************************************************************************/
     /*                                         Functions for setting the current date                                 */
@@ -233,7 +220,7 @@ class Chores extends Component {
         this.setState(
             {
                 choreView: view,
-                viewPage: this.setupChoreView(view, this.state.chores, this.state.houses[0])
+                selectedIcon: this.state.houses[0],
             }
         );
     }
@@ -242,7 +229,6 @@ class Chores extends Component {
         this.setState(
             {
                 selectedIcon: selectedIcon,
-                viewPage: this.setupChoreView(this.state.choreView, this.state.chores, selectedIcon)
             }
         );
     }
@@ -259,7 +245,7 @@ class Chores extends Component {
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
                     <ColumnFilter iconType={this.props.iconType} iconNames={this.state.houses} selectIcon={this.setSelectedIcon}
                                   choreView={this.state.choreView}/>
-                    {this.state.viewPage}
+                    <ChoreViewPage choreView={this.state.choreView} chores={this.state.chores} selectedIcon={this.state.selectedIcon}/>
                 </div>
 
                 <div id="right-column">
