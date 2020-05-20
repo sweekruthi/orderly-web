@@ -48,7 +48,20 @@ To add or remove household members, go to the "My households" page and click on 
 
 ### Viewing your chores
 
+All of the chores for a user can be viewed on the chores page.  Chores a grouped into weeks.
+All of the Chores for a specific week will be displayed at once. Either in a simple view. Which will simply list the title of 
+the chore, or a detailed view, which will also allow the user to view supplies and a description for the chore. Views
+can be switched by selecting the icons in the top right corner.  The type of chore being viewed(Upcoming, completed, overdue)
+can be changed by selecting the buttons in the bottom left corner.
+
 ### Adding a new chore
+
+Chores can be added to a household under the households page by selecting a household.  Selecting the schedule button. 
+And clicking the 'Add chore' button on the left.  When adding a chore a title must be provided.
+Supplies and a description can also be added but they are optional.
 
 ### Completing chores
 
+To have a chore marked as complete the user must post a notification in their feed with a photo showing the completed chore.
+Other users in the household can then click 'approve completion' on the notification.  Once enough users
+have approved the notification the chore will be considered completed.
