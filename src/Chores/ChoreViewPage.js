@@ -7,17 +7,28 @@ class ChoreViewPage extends Component {
     constructor(props) {
         super(props);
         this.setUpChoreView = this.setUpChoreView.bind(this);
+        this.rightType = this.rightType.bind(this);
     }
 
     setUpChoreView() {
         let viewPage = <div/>;
         if (this.props.choreView === ENUMS.ChoreView.CALENDAR) {
-            viewPage = <ChoreCalendar chores={this.props.chores} currWeekNums={this.props.currWeekNums}/>
+            viewPage = <ChoreCalendar choreType={this.props.choreType} chores={this.props.chores}
+                                      currWeekNums={this.props.currWeekNums} inPast={this.props.inPast}
+                                      rightType={this.rightType}/>
         } else {
-            viewPage = <ChoreList chores={this.props.chores} selectedIcon={this.props.selectedIcon} currWeekNums={this.props.currWeekNums}/>
+            viewPage = <ChoreList choreType={this.props.choreType} chores={this.props.chores}
+                                  selectedIcon={this.props.selectedIcon} currWeekNums={this.props.currWeekNums}
+                                  rightType={this.rightType}/>
         }
 
         return viewPage;
+    }
+
+    rightType(completed) {
+        return (this.props.choreType === ENUMS.ChoreType.COMPLETED && completed === true) ||
+            (this.props.choreType === ENUMS.ChoreType.UPCOMING && completed === false && this.props.inPast === false) ||
+            (this.props.choreType === ENUMS.ChoreType.OVERDUE && completed === false && this.props.inPast === true);
     }
 
     render() {

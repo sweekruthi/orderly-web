@@ -1,7 +1,8 @@
 export class Chore {
-    constructor(id, name, weekNum, title, supplies, description, members) {
+    constructor(id, name, completed, weekNum, title, supplies, description, members) {
         this.id = id;
         this.name = name;
+        this.completed = completed
         this.weekNum = weekNum;
         this.title = title;
         this.supplies = supplies;

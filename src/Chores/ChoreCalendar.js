@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import CalendarLine from "./CalendarLine";
 import ChoreCalendarBox from "./ChoreCalendarBox";
+import * as ENUMS from "../App/EnumStor";
 
 /**
  * Displays a days worth of chores in a calendar format.
@@ -25,8 +26,9 @@ class ChoreCalendar extends Component {
         for (let house in this.props.chores) {
             let houseChores = this.props.chores[house];
             for (let i = 0; i < houseChores.length; i++) {
-                if (this.props.currWeekNums[house] === houseChores[i].weekNum) {
-                    choreBoxes.push(<ChoreCalendarBox choreTitle={houseChores[i].title} row={i} column={houseIndex}/>);
+                let currChore = houseChores[i];
+                if (this.props.currWeekNums[house] === currChore.weekNum && this.props.rightType(currChore.completed)) {
+                    choreBoxes.push(<ChoreCalendarBox choreTitle={currChore.title} row={i} column={houseIndex}/>);
                 }
             }
             houseIndex++;
