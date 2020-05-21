@@ -10,10 +10,10 @@ const lineStyle = {
  * Returns A single line found within the ChoreCalendar view. Contains a time given on the left hand side, followed
  * by a horizontal line.
  */
-function CalendarLine(props) {
+function CalendarLine() {
     return (
         <div style={lineStyle}>
-            <div className="calendar-time">{props.time}</div>
+            <div className="calendar-time"/>
             <hr className="calendar-line"/>
         </div>
     );

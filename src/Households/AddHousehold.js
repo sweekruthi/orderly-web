@@ -44,9 +44,7 @@ class AddHousehold extends Component {
             <div id="add-house">
                 <div className="add-filler"></div>
                 <div id="house-details">
-                    <form>
-                        <input id="add-house-title-form" type="text"></input>
-                    </form>
+                    <input id="add-house-title-form" type="text"></input>
                     <div id="house-details-members-title">Members</div>
                     <hr className="house-details-linebreak"/>
                     <div id="house-details-members-list">

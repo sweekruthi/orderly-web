@@ -76,16 +76,25 @@
     border: none;
     padding-top: .1em;
     border-radius: .1em;
+    outline: none;
     background-color: transparent;
     text-align: center;
 }
 
-.dow-button:hover {
-    background-color: lightgrey;
+.dow-button-chevron {
+    font-size: 36pt;
+    height: 1.2em;
+    width: 1.4em;
+    border: none;
+    padding-top: .1em;
+    border-radius: .1em;
+    outline: none;
+    background-color: transparent;
+    text-align: center;
 }
 
-.dow-button:focus {
-    outline: none;
+.dow-button-chevron:hover {
+    background-color: lightgrey;
 }
 
 .dow-selected {
@@ -155,7 +164,7 @@
 
 .calendar-line {
     position: absolute;
-    width: 39rem;
+    width: 40rem;
     right: 0;
     top: .15em;
     border: solid 1px lightgrey;

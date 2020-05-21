@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Chore} from "../App/ObjectStore"
+import {Chore} from "../App/ObjectStor"
 import ChoreInfoButton from "./ChoreInfoButton";
 
 /**

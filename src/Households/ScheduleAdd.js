@@ -25,7 +25,7 @@ class ScheduleAdd extends Component {
 
     render() {
         return(
-            <div className="">
+            <div id="schedule-add">
                 <HouseholdChoreList displayChoreInfo={this.displayChoreInfo}/>
                 <HouseholdChoreDetails id={this.state.selectedChore}/>
             </div>

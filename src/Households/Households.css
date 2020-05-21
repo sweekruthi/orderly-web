@@ -38,10 +38,11 @@
 
 .house-details {
     flex-basis: 67%;
+    min-width: 67%;
 }
 
 .house-details-linebreak {
-    width: 230%;
+    width: 99%;
     right: 0;
     border: solid 1px lightgrey;
 }
@@ -204,4 +205,19 @@
 /*********************************************************************************************************************/
 /*                                                Add Chores                                                         */
 /*********************************************************************************************************************/
+#schedule-add {
+    display: flex;
+    flex-direction: row;
+}
 
+#add-chore-supplies-form {
+    font-size: 12pt;
+    height: 7.2em;
+    width: 56em;
+    padding-top: .6em;
+    margin-left: .9em;
+    margin-top: .9em;
+    border-radius: .3em;
+    border: solid 1px lightgrey;
+    outline: none;
+}
