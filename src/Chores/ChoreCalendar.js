@@ -25,7 +25,9 @@ class ChoreCalendar extends Component {
         for (let house in this.props.chores) {
             let houseChores = this.props.chores[house];
             for (let i = 0; i < houseChores.length; i++) {
-                choreBoxes.push(<ChoreCalendarBox choreTitle={houseChores[i].title} row={i} column={houseIndex}/>)
+                if (this.props.currWeekNums[house] === houseChores[i].weekNum) {
+                    choreBoxes.push(<ChoreCalendarBox choreTitle={houseChores[i].title} row={i} column={houseIndex}/>);
+                }
             }
             houseIndex++;
         }

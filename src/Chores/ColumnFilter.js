@@ -12,7 +12,7 @@ class ColumnFilter extends Component {
         super(props);
         this.toggleButton = this.toggleButton.bind(this);
         this.buttonPosition = this.buttonPosition.bind(this);
-        this.createIcon = this.createIcon.bind(this);
+        this.createIcons = this.createIcons.bind(this);
     }
 
     /**
@@ -52,21 +52,28 @@ class ColumnFilter extends Component {
         return style;
     }
 
-    createIcon(value, index) {
-        if (this.props.iconType === 'house') {
-            return <HouseIcon iconClass={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
-                              onClick={this.toggleButton} iconSize={40} nameSize="14pt" houseName={value}/>
-        } else if (this.props.iconType === 'member') {
-            return <MemberIcon className={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
-                               onClick={this.toggleButton} member={value}/>
+    createIcons() {
+        let icons = [];
+        let index = 0;
+        for (let obj in this.props.iconObjs) {
+            let icon = this.props.iconObjs[obj];
+            if (this.props.iconType === 'house') {
+                icons.push(<HouseIcon iconClass={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
+                                  onClick={this.toggleButton} iconSize={40} nameSize="14pt" houseName={icon.name} houseID={icon.id}/>);
+            } else if (this.props.iconType === 'member') {
+                icons.push(<MemberIcon className={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
+                                   onClick={this.toggleButton} member={icon.name} memberID={icon.id}/>);
+            }
+            index++;
         }
+
+        return icons;
     }
 
     render() {
         return(
           <div id='column-filter'>
-              {this.props.iconNames.map((value, index) => {
-                  return this.createIcon(value, index)})}
+              {this.createIcons()}
           </div>
         );
     }

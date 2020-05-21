@@ -18,7 +18,6 @@ import ChoreViewPage from "./ChoreViewPage";
     Displays all of the chores for a user on a given day.
  */
 class Chores extends Component {
-
     constructor(props) {
         super(props);
         let initDate = new Date();
@@ -26,13 +25,21 @@ class Chores extends Component {
         let weekEnd = new Date();
         weekStart.setDate(weekStart.getDate() - weekStart.getDay());
         weekEnd.setDate(weekEnd.getDate() + (6 - weekEnd.getDay()));
+        initDate.setHours(0,0,0,0);
+        weekStart.setHours(0,0,0,0);
+        weekEnd.setHours(0,0,0,0);
 
         this.getHouses = this.getHouses.bind(this);
         this.getChores = this.getChores.bind(this);
 
         let houses = this.getHouses();
         let chores = this.getChores(houses);
-        let initIcon = houses[0];
+        let currWeekNums = this.getCurrWeeks(houses, weekStart);
+        let initIcon = '';
+        for (let house in houses) {
+            initIcon = houses[house].id;
+            break;
+        }
 
         this.state = {
             schURL: this.props.schURL,
@@ -41,6 +48,7 @@ class Chores extends Component {
             choreType: ENUMS.ChoreType.UPCOMING,
             chores: chores,
             houses: houses,
+            currWeekNums: currWeekNums,
             selectedIcon: initIcon,
             weekStart: weekStart,
             weekEnd: weekEnd,
@@ -52,6 +60,7 @@ class Chores extends Component {
                 "October", "November", "December"]
         };
 
+        this.getInitIcon = this.getInitIcon.bind(this);
         this.setDay = this.setDay.bind(this);
         this.setMonth = this.setMonth.bind(this);
         this.setYear = this.setYear.bind(this);
@@ -70,15 +79,18 @@ class Chores extends Component {
 
     getHouses() {
         /*Make an api call to view_individual_houses.*/
-        let houses = ['house 1', 'house 2', 'house 3'];
-        let selectedIcon = '';
-        if (houses.length !== 0) {
-            selectedIcon = houses[0];
-        }
+        let house1 = new OBJECTS.House("house_1_id", "house 1", 4, 1586821960000);
+        let house2 = new OBJECTS.House("house_2_id", "house 2", 3, 1564012360000);
+        let house3 = new OBJECTS.House("house_3_id", "house 3", 1, 1589932360000);
+
+        let houses = {
+            "house_1_id" : house1,
+            "house_2_id" : house2,
+            "house_3_id" : house3
+        };
 
         this.setState(
             {
-                selectedIcon: selectedIcon,
                 houses: houses
             }
         );
@@ -86,18 +98,19 @@ class Chores extends Component {
         return houses;
     }
 
-    getChores(houses) {
-        let Chore1 = new OBJECTS.Chore("", "house 1","Vacuum", "", "", "");
-        let Chore2 = new OBJECTS.Chore("", "house 1","Dishes", "", "", "");
-        let Chore3 = new OBJECTS.Chore("", "house 2","Clean Bed", "", "", "");
-        let Chore4 = new OBJECTS.Chore("", "house 3","Sweep", "", "", "");
+    getChores() {
+        let chore1 = new OBJECTS.Chore("", "house_1_id", 1,"Vacuum", "", "", "");
+        let chore2 = new OBJECTS.Chore("", "house_1_id", 1,"Dishes", "", "", "");
+        let chore3 = new OBJECTS.Chore("", "house_2_id", 1,"Clean Bed", "", "", "");
+        let chore4 = new OBJECTS.Chore("", "house_3_id", 0, "Sweep", "", "", "");
 
-        let houseNames = ['house_1', 'house_2', 'house_3'];
+        let choreObjs = [chore1, chore2, chore3, chore4];
 
         let chores = {};
-        chores['house 1'] = [Chore1, Chore2];
-        chores['house 2'] = [Chore3];
-        chores['house 3'] = [Chore4];
+
+        chores['house_1_id'] = [chore1, chore2];
+        chores['house_2_id'] = [chore3];
+        chores['house_3_id'] = [chore4];
 
         /*For each house id make a call to get the houses name, schedule_start,
         * and num weeks.  Calculate the current week the houses schedule is on by finding the difference in weeks between
@@ -112,6 +125,38 @@ class Chores extends Component {
         );
 
         return chores;
+    }
+
+    getCurrWeeks(houses, weekStart) {
+        let houseCurrWeekNums = {};
+
+        for (let house in houses) {
+            let currHouse = houses[house];
+            let houseWeekStart = new Date(currHouse.startDate);
+            houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
+            houseWeekStart.setHours(0,0,0,0,);
+            console.log("house: " + houseWeekStart);
+            let weekDiff = Math.abs((weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
+            houseCurrWeekNums[house] = weekDiff % currHouse.weekNum;
+        }
+
+        this.setState(
+            {
+                currWeekNums: houseCurrWeekNums
+            }
+        );
+
+        return houseCurrWeekNums;
+    }
+
+    getInitIcon() {
+        let initIcon = '';
+        for (let house in this.state.houses) {
+            initIcon = this.state.houses[house].id;
+            break;
+        }
+
+        return initIcon;
     }
 
     /******************************************************************************************************************/
@@ -187,11 +232,14 @@ class Chores extends Component {
 
     moveDate(numMoves, step) {
         let newDate = new Date(this.state.year, this.state.month, this.state.day);
-        let newStart = new Date();
-        let newEnd = new Date();
+        let newStart = new Date(this.state.year, this.state.month, this.state.day);
+        let newEnd = new Date(this.state.year, this.state.month, this.state.day);
         newDate.setDate(newDate.getDate() + numMoves * step);
-        newStart.setDate(newDate.getDate() - newDate.getDay());
-        newEnd.setDate(newDate.getDate() + (6 - newDate.getDay()));
+        newStart.setDate((newStart.getDate() + numMoves * step) - newDate.getDay());
+        newEnd.setDate((newEnd.getDate() + numMoves * step) + (6 - newDate.getDay()));
+        newDate.setHours(0,0,0,0);
+        newStart.setHours(0,0,0,0);
+        newEnd.setHours(0,0,0,0);
         this.setState(
             {
                 dow: newDate.getDay(),
@@ -199,7 +247,8 @@ class Chores extends Component {
                 month: newDate.getMonth(),
                 year: newDate.getFullYear(),
                 weekStart: newStart,
-                weekEnd: newEnd
+                weekEnd: newEnd,
+                currWeekNums: this.getCurrWeeks(this.state.houses, newStart)
             }
         );
     }
@@ -220,7 +269,7 @@ class Chores extends Component {
         this.setState(
             {
                 choreView: view,
-                selectedIcon: this.state.houses[0],
+                selectedIcon: this.getInitIcon()
             }
         );
     }
@@ -243,9 +292,10 @@ class Chores extends Component {
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
-                    <ColumnFilter iconType={this.props.iconType} iconNames={this.state.houses} selectIcon={this.setSelectedIcon}
+                    <ColumnFilter iconType={this.props.iconType} iconObjs={this.state.houses} selectIcon={this.setSelectedIcon}
                                   choreView={this.state.choreView}/>
-                    <ChoreViewPage choreView={this.state.choreView} chores={this.state.chores} selectedIcon={this.state.selectedIcon}/>
+                    <ChoreViewPage choreView={this.state.choreView} chores={this.state.chores} selectedIcon={this.state.selectedIcon}
+                                    currWeekNums={this.state.currWeekNums}/>
                 </div>
 
                 <div id="right-column">
