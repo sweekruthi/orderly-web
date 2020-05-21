@@ -100,10 +100,10 @@ class Chores extends Component {
     }
 
     getChores() {
-        let chore1 = new OBJECTS.Chore("", "house_1_id", false,1,"Vacuum", "", "", "");
-        let chore2 = new OBJECTS.Chore("", "house_1_id", true,3,"Dishes", "", "", "");
-        let chore3 = new OBJECTS.Chore("", "house_2_id", false,1,"Clean Bed", "", "", "");
-        let chore4 = new OBJECTS.Chore("", "house_3_id", false,0, "Sweep", "", "", "");
+        let chore1 = new OBJECTS.Chore("house_1_id", false,1,"Vacuum", "", "", "");
+        let chore2 = new OBJECTS.Chore("house_1_id", true,3,"Dishes", "", "", "");
+        let chore3 = new OBJECTS.Chore("house_2_id", false,1,"Clean Bed", "", "", "");
+        let chore4 = new OBJECTS.Chore("house_3_id", false,0, "Sweep", "", "", "");
 
         let choreObjs = [chore1, chore2, chore3, chore4];
 
@@ -136,7 +136,6 @@ class Chores extends Component {
             let houseWeekStart = new Date(currHouse.startDate);
             houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
             houseWeekStart.setHours(0,0,0,0,);
-            console.log("house: " + houseWeekStart);
             let weekDiff = (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
             houseCurrWeekNums[house] = weekDiff;
         }
