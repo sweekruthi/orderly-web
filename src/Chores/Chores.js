@@ -29,27 +29,15 @@ class Chores extends Component {
         weekStart.setHours(0,0,0,0);
         weekEnd.setHours(0,0,0,0);
 
-        this.getHouses = this.getHouses.bind(this);
-        this.getChores = this.getChores.bind(this);
-
-        let houses = this.getHouses();
-        let chores = this.getChores(houses);
-        let currWeekNums = this.getCurrWeeks(houses, weekStart);
-        let initIcon = '';
-        for (let house in houses) {
-            initIcon = houses[house].id;
-            break;
-        }
+        this.getInitIcon = this.getInitIcon.bind(this);
 
         this.state = {
-            schURL: this.props.schURL,
-            choreURL: URLS.CHORE_INFO_URL,
             choreView: ENUMS.ChoreView.CALENDAR,
             choreType: ENUMS.ChoreType.UPCOMING,
-            chores: chores,
-            houses: houses,
-            currWeekNums: currWeekNums,
-            selectedIcon: initIcon,
+            chores: this.props.chores,
+            filters: this.props.filters,
+            currWeekNums: this.props.getCurrWeeks(weekStart),
+            selectedIcon: this.getInitIcon(),
             weekStart: weekStart,
             weekEnd: weekEnd,
             inPast: false,
@@ -57,11 +45,8 @@ class Chores extends Component {
             day: initDate.getDate(),
             month: initDate.getMonth(),
             year: initDate.getFullYear(),
-            monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                "October", "November", "December"]
         };
 
-        this.getInitIcon = this.getInitIcon.bind(this);
         this.setDay = this.setDay.bind(this);
         this.setMonth = this.setMonth.bind(this);
         this.setYear = this.setYear.bind(this);
@@ -74,85 +59,10 @@ class Chores extends Component {
 
     }
 
-    /******************************************************************************************************************/
-    /*                                         Functions for retrieving data from backend                             */
-    /******************************************************************************************************************/
-
-    getHouses() {
-        /*Make an api call to view_individual_houses.*/
-        let house1 = new OBJECTS.House("house_1_id", "house 1", 4, 1589265005000);
-        let house2 = new OBJECTS.House("house_2_id", "house 2", 3, 1589956205000);
-        let house3 = new OBJECTS.House("house_3_id", "house 3", 1, 1581661805000);
-
-        let houses = {
-            "house_1_id" : house1,
-            "house_2_id" : house2,
-            "house_3_id" : house3
-        };
-
-        this.setState(
-            {
-                houses: houses
-            }
-        );
-
-        return houses;
-    }
-
-    getChores() {
-        let chore1 = new OBJECTS.Chore("house_1_id", false,1,"Vacuum", "", "", "");
-        let chore2 = new OBJECTS.Chore("house_1_id", true,3,"Dishes", "", "", "");
-        let chore3 = new OBJECTS.Chore("house_2_id", false,1,"Clean Bed", "", "", "");
-        let chore4 = new OBJECTS.Chore("house_3_id", false,0, "Sweep", "", "", "");
-
-        let choreObjs = [chore1, chore2, chore3, chore4];
-
-        let chores = {};
-
-        chores['house_1_id'] = [chore1, chore2];
-        chores['house_2_id'] = [chore3];
-        chores['house_3_id'] = [chore4];
-
-        /*For each house id make a call to get the houses name, schedule_start,
-        * and num weeks.  Calculate the current week the houses schedule is on by finding the difference in weeks between
-        * the start date and today's date, and modding by the houses num weeks. Make a call to view_individual_chores, passing
-        * in a house_id and num_week. create a new entry in chores with the key equal to the house name and values equal to the
-        * chore id's.*/
-
-        this.setState(
-            {
-                chores: chores
-            }
-        );
-
-        return chores;
-    }
-
-    getCurrWeeks(houses, weekStart) {
-        let houseCurrWeekNums = {};
-
-        for (let house in houses) {
-            let currHouse = houses[house];
-            let houseWeekStart = new Date(currHouse.startDate);
-            houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
-            houseWeekStart.setHours(0,0,0,0,);
-            let weekDiff = (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
-            houseCurrWeekNums[house] = weekDiff;
-        }
-
-        this.setState(
-            {
-                currWeekNums: houseCurrWeekNums
-            }
-        );
-
-        return houseCurrWeekNums;
-    }
-
     getInitIcon() {
         let initIcon = '';
-        for (let house in this.state.houses) {
-            initIcon = this.state.houses[house].id;
+        for (let filter in this.props.filters) {
+            initIcon = this.props.filters[filter].id;
             break;
         }
 
@@ -249,7 +159,7 @@ class Chores extends Component {
                 year: newDate.getFullYear(),
                 weekStart: newStart,
                 weekEnd: newEnd,
-                currWeekNums: this.getCurrWeeks(this.state.houses, newStart),
+                currWeekNums: this.props.getCurrWeeks(newStart),
                 inPast: newEnd <= new Date()
             }
         );
@@ -288,13 +198,14 @@ class Chores extends Component {
         return (
             <div id="chores">
                 <div id="left-column">
+                    {this.props.backArrow}
                     <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
                     <ChoreTypeButtons initType={this.state.choreType} setChoreType={this.setChoreType}/>
                 </div>
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
-                    <ColumnFilter iconType={this.props.iconType} iconObjs={this.state.houses} selectIcon={this.setSelectedIcon}
+                    <ColumnFilter iconType={this.props.iconType} iconObjs={this.state.filters} selectIcon={this.setSelectedIcon}
                                   choreView={this.state.choreView}/>
                     <ChoreViewPage choreView={this.state.choreView} choreType={this.state.choreType}
                                    chores={this.state.chores} selectedIcon={this.state.selectedIcon}

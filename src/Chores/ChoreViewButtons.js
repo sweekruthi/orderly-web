@@ -40,4 +40,4 @@ class ChoreViewButtons extends Component {
     }
 }
 
-export default ChoreViewButtons
+export default ChoreViewButtons;

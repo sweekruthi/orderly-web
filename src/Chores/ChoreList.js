@@ -14,12 +14,11 @@ class ChoreList extends Component {
 
     createChoreBoxes() {
         let choreBoxes = [];
-        let houseChores = this.props.chores[this.props.selectedIcon];
-        for (let i = 0; i < houseChores.length; i++) {
-            let currChore = houseChores[i];
+        let currChores = this.props.chores[this.props.selectedIcon];
+        for (let i = 0; i < currChores.length; i++) {
+            let currChore = currChores[i];
             if (this.props.currWeekNums[this.props.selectedIcon] === currChore.weekNum && this.props.rightType(currChore.completed)) {
-                choreBoxes.push(<ChoreListBox title={currChore.title} supplies={currChore.supplies}
-                                              description={currChore.description}/>);
+                choreBoxes.push(<ChoreListBox title={currChore.title} description={currChore.description}/>);
             }
         }
 

@@ -1,16 +1,13 @@
 import React from 'react';
 import './App.css';
-import * as URLS from "../App/URLStor"
 import Households from "../Households/Households";
 import NavBar from "./NavBar";
 import Notifications from '../Notifications/Notifications';
 import { Redirect } from '@reach/router/lib/history';
 import Cookies from 'js-cookie';
-import Chores from '../Chores/Chores';
 import { access } from 'fs';
 import { navigate } from '@reach/router';
-import { FaHome } from 'react-icons/fa';
-import HouseIcon from "../Households/HouseIcon";
+import IndividualSchedule from "../Chores/IndividualSchedule";
 
 
 class Home extends React.Component {
@@ -35,7 +32,7 @@ class Home extends React.Component {
             case "households":
                 return <Households/>;
             case "chores":
-                return <Chores schURL={URLS.IND_SCH_URL} iconType={'house'}/>;
+                return <IndividualSchedule/>;
             case "notifications":
                 return <Notifications />;
             default:
@@ -44,14 +41,14 @@ class Home extends React.Component {
     }
 
     render() {
-        /*const accessToken = Cookies.get('access_token');
+        const accessToken = Cookies.get("username");
         if (!accessToken) {
             window.location.replace('/login');
             return null;
-        }*/
+        }
         return (<div className="App">
-            {/*<p>Hi {this.state.user}!</p>*/}
-            <NavBar setPage={this.setPage} />
+            {<p>Hi {this.state.user}!</p>}
+            <NavBar setPage={this.setPage}/>
             {this.currTab()}
         </div>);
     }

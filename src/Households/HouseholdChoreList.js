@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Chore} from "../App/ObjectStor"
 import ChoreInfoButton from "./ChoreInfoButton";
+import BackArrow from "./BackArrow";
 
 /**
  * Displays a list of all the households a user is a member of. As well as a button for adding new households
@@ -9,12 +9,15 @@ class HouseholdChoreList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chores: [new Chore("1", "vacuum", [], "", 0, 0, []),
-                new Chore("2", "dishes", [], "", 0, 0, [])]
+            choreButtons: this.createInfoButtons()
         };
-
         this.createChore = this.createChore.bind(this);
         this.toggleHouseButton = this.toggleHouseButton.bind(this);
+        this.createInfoButtons = this.createInfoButtons.bind(this);
+    }
+
+    componentDidMount() {
+        document.querySelector('.house-button').classList.add('house-button-selected');
     }
 
     /**
@@ -23,7 +26,7 @@ class HouseholdChoreList extends Component {
     createChore() {
         /*make api call first to register a new chore with the database, get chore id from api call. create new chore
         * on the front end with id*/
-        this.state.chores.push(new Chore("", "", [], "", 0, 0, []));
+
     }
 
     /**
@@ -34,12 +37,26 @@ class HouseholdChoreList extends Component {
         e.target.classList.add('house-button-selected');
     };
 
+    createInfoButtons() {
+        let infoButtons = [];
+
+        for (let chore in this.props.chores) {
+            let currChore = this.props.chores[chore];
+            infoButtons.push(<ChoreInfoButton displayChoreInfo={this.props.displayChoreInfo}
+                                              toggleButton={this.toggleHouseButton} chore={currChore}/>);
+        }
+
+        return infoButtons;
+    }
+
     render() {
         return (
-            <div className="house-list">
-                {this.state.chores.map((value) => {
-                    return <ChoreInfoButton displayChoreInfo={this.props.displayChoreInfo} id={value.id} chore={value.title}/>})}
-                <button className="house-button" onClick={this.goToAddHousehold}>Add Chore</button>
+            <div style={{flexBasis: '33%'}}>
+                <BackArrow goBack={this.props.goBack}/>
+                <div className="house-list">
+                    {this.createInfoButtons()}
+                    <button className="house-button" onClick={this.props.addChore}>Add Chore</button>
+                </div>
             </div>
         )
     }

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AddHousehold from "./AddHousehold";
+import HouseButton from "./HouseButton";
 
 /**
  * Displays a list of all the households a user is a member of. As well as a button for adding new households
@@ -7,31 +8,30 @@ import AddHousehold from "./AddHousehold";
 class HouseholdsList extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            houses: ["home 1", "home 2"]
-        };
 
         this.displayHouseInfo = this.displayHouseInfo.bind(this);
         this.goToAddHousehold = this.goToAddHousehold.bind(this);
         this.toggleHouseButton = this.toggleHouseButton.bind(this);
+        this.createHouseButtons = this.createHouseButtons.bind(this);
     }
 
     componentDidMount() {
-        document.querySelector('.house-button').classList.add('house-button-selected');
+        /*document.getElementById(this.props.initSelected).classList.add('house-button-selected');*/
     }
 
     /**
      * Grabs and displays info related to a household.
      */
-    displayHouseInfo() {
-
+    displayHouseInfo(e, houseID) {
+        /*this.toggleHouseButton(e);
+        this.props.setSelectedHouse(houseID);*/
     }
 
     /**
      * Switches Households content page to the add house page.
      */
     goToAddHousehold() {
-        this.props.setPage(<AddHousehold setPage={this.props.setPage}/>);
+        this.props.setPage(<AddHousehold addHouse={this.props.addHouse} setPage={this.props.setPage}/>);
     };
 
     /**
@@ -42,12 +42,25 @@ class HouseholdsList extends Component {
         e.target.classList.add('house-button-selected');
     };
 
+    createHouseButtons() {
+        let houseButtons = [];
+
+        for (let house in this.props.houses) {
+            let currHouse = this.props.houses[house];
+            houseButtons.push(<HouseButton onClick={this.displayHouseInfo} title={currHouse.title} id={currHouse.id}/>);
+        }
+
+        if (houseButtons.length !== 0) {
+            return houseButtons;
+        } else {
+            return <button className="house-button" onClick={this.goToAddHousehold}>Create household</button>
+        }
+    }
+
     render() {
         return (
             <div className="house-list">
-                {this.state.houses.map((value) => {
-                    return <button className="house-button" onClick={this.displayHouseInfo}>{value}</button>})}
-                <button className="house-button" onClick={this.goToAddHousehold}>Add household</button>
+                {this.createHouseButtons()}
             </div>
         )
     }

@@ -7,6 +7,10 @@ import { navigate } from "@reach/router"
 
 function Login() {
 
+    const [createFirstName, setCreateFirstName] = React.useState("");
+    const [createFirstNameHelper, setCreateFirstNameHelper] = React.useState("");
+    const [createLastName, setCreateLastName] = React.useState("");
+    const [createLastNameHelper, setCreateLastNameHelper] = React.useState("");
     const [createEmail, setCreateEmail] = React.useState("");
     const [createEmailHelper, setCreateEmailHelper] = React.useState("");
     const [createPassword, setCreatePassword] = React.useState("");
@@ -19,6 +23,16 @@ function Login() {
 
     const [createMessage, setCreateMessage] = React.useState("");
     const [loginMessage, setLoginMessage] = React.useState("");
+
+    function createFirstNameOnChange(event) {
+        setCreateFirstName(event.target.value);
+        setCreateFirstNameHelper("");
+    }
+
+    function createLastNameOnChange(event) {
+        setCreateLastName(event.target.value);
+        setCreateLastNameHelper("");
+    }
 
     function createEmailOnChange(event) {
         setCreateEmail(event.target.value);
@@ -54,7 +68,10 @@ function Login() {
         }
 
         const requestObject = {
-            name: createEmail
+            username: createEmail,
+            firstname: createFirstName,
+            lastname: createLastName,
+            password: createPassword
         };
         const url = "http://127.0.0.1:8000/chorescheduling/create-user";
         Request
@@ -62,10 +79,10 @@ function Login() {
             .send(requestObject)
             .then(res => {
                 console.log("data is", res.body);
-                if (res.body.user_created) {
-                    setCreateMessage(`Account has been successfully created! Please Login.`);
+                if (res.body.error_message === "-") {
+                    setCreateMessage(`Account has been successfully created! Please Login. ` + createPassword + " " + createEmail);
                 } else {
-                    setCreateMessage("Something went wrong, please try again.");
+                    setCreateMessage("Something went wrong, " + res.body.error_message);
                 }
             })
             .catch(err => {
@@ -80,21 +97,23 @@ function Login() {
         }
 
         const requestObject = {
-            name: createEmail
+            username: loginEmail,
+            password: loginPassword
         };
-        const url = "http://127.0.0.1:8000/chorescheduling/create-user";
+        const url = "http://127.0.0.1:8000/chorescheduling/login-user";
 
         Request
             .post(url)
             .send(requestObject)
             .then(res => {
-                if (res.body.user_created) {
+                if (res.body.error_message === "-") {
                     const expires = 60 * 60 * 1000;
-                    const inOneHour = new Date(new Date().getTime() + expires)
-                    Cookies.set('access_token', loginEmail, { expires: inOneHour })
+                    const inOneHour = new Date(new Date().getTime() + expires);
+                    Cookies.set('username', loginEmail, { expires: inOneHour });
+                    Cookies.set('pid', res.body.person_id, { expires: inOneHour });
                     navigate('home');
                 } else {
-                    setLoginMessage("The entered email or password does not match our records.");
+                    setLoginMessage("The entered email or password does not match our records." + res.body.error_message);
                 }
             })
             .catch(err => {
@@ -107,6 +126,14 @@ function Login() {
         <div id="login">
             <div>
                 <h2>Create an account</h2>
+
+                <FormGroup inline={true} label="First Name" labelFor="text-input" helperText={createFirstNameHelper}>
+                    <InputGroup id="first-name" placeholder="First Name" value={createFirstName} onChange={createFirstNameOnChange} />
+                </FormGroup>
+
+                <FormGroup inline={true} label="Last Name" labelFor="text-input" helperText={createLastNameHelper}>
+                    <InputGroup id="last-name" placeholder="Last Name" value={createLastName} onChange={createLastNameOnChange} />
+                </FormGroup>
 
                 <FormGroup inline={true} label="Email" labelFor="text-input" helperText={createEmailHelper}>
                     <InputGroup id="email" placeholder="E-mail address" value={createEmail} onChange={createEmailOnChange} />

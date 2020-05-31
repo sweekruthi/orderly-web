@@ -3,17 +3,24 @@ import './App.css';
 import Login from '../Login/Login';
 import { Router } from "@reach/router"
 import Home from './Home';
+import Cookies from 'js-cookie';
 
 class App extends React.Component{
+    constructor(props) {
+        super(props);
+        Cookies.remove('username');
+        Cookies.remove('pid');
+    }
+
     render() {
         return (
             <div className="App">
                 <h1 id="heading">Orderly</h1>
                 <Home path="home"/>
                 <Router>
-                    {/*<Login path="/"/>
+                    <Login path="/"/>
                     <Home path="home"/>
-                    <Login path="login"/>*/}
+                    <Login path="login"/>
                 </Router>
             </div>
         );

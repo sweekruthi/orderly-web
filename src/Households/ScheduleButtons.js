@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import ScheduleEdit from "./ScheduleEdit";
 import ScheduleAdd from "./ScheduleAdd";
+import ScheduleEdit from "./ScheduleEdit";
+import HouseSchedule from "./HouseSchedule";
 
 /**
  * Buttons which allow the user to edit the schedule for a household.
@@ -8,20 +9,22 @@ import ScheduleAdd from "./ScheduleAdd";
 class ScheduleButtons extends Component {
     constructor(props) {
         super(props);
-        this.setPage = this.setPage.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
-    setPage(newPage) {
-        this.props.setPage(newPage);
+    goBack() {
+        this.props.setPage(<HouseSchedule house={this.props.house} setPage={this.props.setPage}/>);
     }
 
     render() {
         return(
             <div id="schedule-buttons">
-                <button id="add-chore" className="chore-button" onClick={() => this.setPage(<ScheduleAdd/>)}>
+                <button id="add-chore" className="chore-button"
+                        onClick={() => this.props.setPage(<ScheduleAdd house={this.props.house} chores={this.props.chores}
+                                                                       goBack={this.goBack}/>)}>
                     Add Chore</button>
-                <button id="edit-chore" className="chore-button" onClick={() => this.setPage(<ScheduleEdit/>)}>
-                    Edit Schedule</button>
+                <button id="edit-chore" className="chore-button" onClick={() => this.props.setPage(<ScheduleEdit goBack={this.goBack}/>)}>
+                    Generate New Schedule</button>
             </div>
         );
     }

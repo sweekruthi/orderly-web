@@ -25,7 +25,7 @@
     outline: none;
 }
 .house-button:hover {
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
 }
 
 .house-button-selected {
@@ -38,7 +38,6 @@
 
 .house-details {
     flex-basis: 67%;
-    min-width: 67%;
 }
 
 .house-details-linebreak {
@@ -122,6 +121,7 @@
 #add-house {
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .add-filler {
@@ -202,12 +202,39 @@
     background-color: lightgrey;
 }
 
+.back-arrow {
+    position: absolute;
+    width: 5em;
+    border: none;
+    border-radius: .5em;
+    outline: none;
+    background-color: transparent;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+.back-arrow:hover {
+    background-color: lightgrey;
+}
+
 /*********************************************************************************************************************/
 /*                                                Add Chores                                                         */
 /*********************************************************************************************************************/
+
 #schedule-add {
     display: flex;
     flex-direction: row;
+}
+
+#add-chore-title-form {
+    font-size: 36pt;
+    height: 1.2em;
+    line-height: 1.6;
+    padding-top: .2em;
+    margin-left: .3em;
+    margin-top: .3em;
+    border-radius: .1em;
+    border: solid 1px lightgrey;
 }
 
 #add-chore-supplies-form {
@@ -221,3 +248,87 @@
     border: solid 1px lightgrey;
     outline: none;
 }
+
+#add-chore-save {
+    position: relative;
+    float: right;
+    height: 4em;
+    width: 12em;
+    right: 3em;
+    bottom: -1em;
+    background-color: transparent;
+    border: solid 1px lightgrey;
+    border-radius: 1em;
+    outline: none;
+}
+
+#add-chore-delete {
+    position: relative;
+    float: left;
+    height: 4em;
+    width: 12em;
+    right: 3em;
+    bottom: -1em;
+    background-color: transparent;
+    border: solid 1px lightgrey;
+    border-radius: 1em;
+    outline: none;
+}
+
+#add-chore-save:hover {
+    background-color: lightgrey;
+}
+
+#add-chore-delete:hover {
+    background-color: lightgrey;
+}
+
+/*********************************************************************************************************************/
+/*                                                Edit Schedule                                                      */
+/*********************************************************************************************************************/
+
+#schedule-start-forms {
+    display: flex;
+    flex-direction: row;
+}
+
+.schedule-start-form {
+    font-size: 24pt;
+    width: 2em;
+    margin-top: .5em;
+    margin-bottom: 1em;
+    border: solid 1px lightgrey;
+    border-radius: .2em;
+    outline: none;
+}
+
+.schedule-start-slash {
+    font-size: 24pt;
+    margin: .5em .5em 1em .5em;
+    color: lightgrey;
+}
+
+.schedule-length-form {
+    font-size: 24pt;
+    width: 4em;
+    margin-top: .5em;
+    border: solid 1px lightgrey;
+    border-radius: .2em;
+    outline: none;
+}
+
+::placeholder {
+    color: lightgrey;
+    opacity: .85;
+}
+
+:-ms-input-placeholder {
+    color: lightgrey;
+    opacity: .85;
+}
+
+::-ms-input-placeholder {
+    color: lightgrey;
+    opacity: .85;
+}
+

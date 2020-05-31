@@ -1,20 +1,31 @@
 export class Chore {
-    constructor(id, completed, weekNum, title, supplies, description, assignedTo) {
+    constructor(id, hid, pid, completed, weekNum, title, description) {
         this.id = id;
-        this.completed = completed
+        this.hid = hid;
+        this.pid = pid;
+        this.completed = completed;
         this.weekNum = weekNum;
         this.title = title;
-        this.supplies = supplies;
         this.description = description;
-        this.assignedTo = assignedTo;
     }
 }
 
 export class House {
-    constructor(id, name, weekNum, startDate) {
+    constructor(id, title, members, weekNum, startDate) {
         this.id = id;
-        this.name = name;
+        this.title = title;
+        this.members = members;
         this.weekNum = weekNum;
         this.startDate = startDate;
+    }
+}
+
+export class User {
+    constructor(id, username, first_name, last_name, hid) {
+        this.id = id;
+        this.username = username;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.hid = hid;
     }
 }

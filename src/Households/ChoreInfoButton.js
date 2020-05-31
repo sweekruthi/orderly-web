@@ -3,15 +3,18 @@ import React, {Component} from 'react';
 class ChoreInfoButton extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            id: this.props.id
-        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(e) {
+        this.props.displayChoreInfo(this.props.chore.id);
+        this.props.toggleButton(e);
     }
 
     render() {
         return(
-            <button className="house-button" onClick={() => this.props.displayChoreInfo(this.props.id)}>
-                {this.props.chore}
+            <button className="house-button" onClick={this.handleClick}>
+                {this.props.chore.title}
             </button>
         );
     }

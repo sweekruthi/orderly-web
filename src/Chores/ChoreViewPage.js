@@ -18,8 +18,8 @@ class ChoreViewPage extends Component {
                                       rightType={this.rightType}/>
         } else {
             viewPage = <ChoreList choreType={this.props.choreType} chores={this.props.chores}
-                                  selectedIcon={this.props.selectedIcon} currWeekNums={this.props.currWeekNums}
-                                  rightType={this.rightType}/>
+                                  currWeekNums={this.props.currWeekNums} inPast={this.props.inPast}
+                                  rightType={this.rightType} selectedIcon={this.props.selectedIcon}/>
         }
 
         return viewPage;
@@ -27,8 +27,8 @@ class ChoreViewPage extends Component {
 
     rightType(completed) {
         return (this.props.choreType === ENUMS.ChoreType.COMPLETED && completed === true) ||
-            (this.props.choreType === ENUMS.ChoreType.UPCOMING && completed === false && this.props.inPast === false) ||
-            (this.props.choreType === ENUMS.ChoreType.OVERDUE && completed === false && this.props.inPast === true);
+               (this.props.choreType === ENUMS.ChoreType.UPCOMING  && completed === false && this.props.inPast === false) ||
+               (this.props.choreType === ENUMS.ChoreType.OVERDUE   && completed === false && this.props.inPast === true);
     }
 
     render() {

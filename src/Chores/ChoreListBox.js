@@ -34,8 +34,6 @@ class ChoreListBox extends Component {
                 <div className="chore-list-box">
                     <div className="chore-list-box-left">
                         <div className="clb-title">{this.props.title}</div>
-                        <div className="clb-supplies-title">Supplies:</div>
-                        <div className="clb-supplies">{this.props.supplies}</div>
                     </div>
                     <div className="chore-list-box-right">
                         <button className="clb-desc-button" onClick={this.toggleDescDisplay}>description</button>
