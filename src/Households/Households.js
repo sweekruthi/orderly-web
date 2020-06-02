@@ -15,20 +15,12 @@ class Households extends Component {
     constructor(props) {
         super(props);
 
-        let activeError = "";
-        Request
-            .get(URLS.ACTIVE_USER_URL)
-            .then(res => {
-                activeError = res.body.error_message;
-            })
-
         let houses = this.getHouses();
         this.getUsers(houses);
 
         this.state = {
             houses: houses,
             contentPage: <HouseholdViewer houses={houses} addHouse={this.addHouse} setPage={this.setHousePage}/>,
-            activeUser: activeError + ":active error:"
         };
         this.addHouse = this.addHouse.bind(this);
     }
@@ -63,6 +55,8 @@ class Households extends Component {
 
             houses[house.id] = house;
         }
+
+        /*houses["1"] = new OBJECTS.House("1", "House 1", [], 4,  1591059947);*/
 
        return houses;
     }
@@ -110,8 +104,6 @@ class Households extends Component {
     render() {
         return (
             <div>
-                {this.props.error}
-                {this.state.activeUser}
                 {this.state.contentPage}
             </div>
         )

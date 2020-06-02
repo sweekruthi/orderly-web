@@ -2,16 +2,11 @@ import React, {Component} from 'react';
 import './Chores.css';
 import '../Households/Households.css'
 import ChoreDate from "./ChoreDate";
-import DateForm from "./DateForm";
 import DayOfWeekPicker from "./DayOfWeekPicker";
 import ChoreTypeButtons from "./ChoreTypeButtons";
 import ChoreViewButtons from "./ChoreViewButtons";
 import ColumnFilter from "./ColumnFilter";
-import ChoreCalendar from "./ChoreCalendar";
-import ChoreList from "./ChoreList";
-import * as URLS from "../App/URLStor";
 import * as ENUMS from "../App/EnumStor";
-import * as OBJECTS from "../App/ObjectStor";
 import ChoreViewPage from "./ChoreViewPage";
 
 /**

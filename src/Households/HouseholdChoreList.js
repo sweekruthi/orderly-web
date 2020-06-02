@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ChoreInfoButton from "./ChoreInfoButton";
-import BackArrow from "./BackArrow";
+import BackArrow from "../Miscellaneous/BackArrow";
 
 /**
  * Displays a list of all the households a user is a member of. As well as a button for adding new households

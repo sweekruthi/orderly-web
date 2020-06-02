@@ -1,20 +1,43 @@
-import React from 'react';
-import ReactDOM from 'react-dom'
+import React, {Component} from 'react';
 import './Notifications.css';
+import NotificationsFeed from "./NotificationsFeed";
+import NotificationsOptions from "./NotificationsOptions";
 
-function Notifications(props) {
+
+class Notifications extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            mgs: [],
+            mgsInProgress: false
+        }
+        this.addMessage = this.addMessage.bind(this);
+        this.submitChore = this.submitChore.bind(this);
+    }
+
+    addMessage(newMessage) {
+        this.setState((prevState) => ({
+            mgs: this.state.mgs.concat([newMessage]),
+            mgsInProgress: true
+        }))
+    }
+
+    submitChore() {
+        this.setState(
+            {
+                mgsInProgress: false
+            }
+        )
+    }
+
+    render() {
         return (
-            <div id="notif">
-                <div id="feed">This is where each task/event initiated by users will show up</div>
-                <div id="options">This is the right column with some additional options</div>
+            <div id='notifications'>
+                <NotificationsFeed mgs={this.state.mgs}/>
+                <NotificationsOptions addMessage={this.addMessage} mgsInProgress={this.state.mgsInProgress}/>
             </div>
         )
+    }
 }
-
-const element = <Notifications/>;
-ReactDOM.render(
-    element,
-    document.getElementById('root')
-);
 
 export default Notifications;

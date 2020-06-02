@@ -2,12 +2,10 @@ import React, {Component} from 'react';
 import NewMemberCircle from "./NewMemberCircle";
 import MemberCircle from "./MemberCircle";
 import Households from "./Households";
-import * as OBJECTS from "../App/ObjectStor";
-import BackArrow from "./BackArrow";
+import BackArrow from "../Miscellaneous/BackArrow";
 import Request from "superagent";
 import {CREATE_HOUSE_URL} from "../App/URLStor";
 import {ADD_MEMBERS_URL} from "../App/URLStor";
-import * as URLS from "../App/URLStor";
 
 /**
  * Page which allows a user to asoociate a new household with their account. Either by Creating a new house, or by
@@ -16,17 +14,11 @@ import * as URLS from "../App/URLStor";
 class AddHousehold extends Component {
     constructor(props) {
         super(props);
-        let activeError = "";
-        Request
-            .get(URLS.ACTIVE_USER_URL)
-            .then(res => {
-                activeError = res.body.error_message;
-            })
 
         this.state = {
             title: "House",
             members: [],
-            userError: activeError + ":user error:"
+            errorMessage: ""
         };
 
         this.handleTitleChange = this.handleTitleChange.bind(this);
@@ -72,7 +64,7 @@ class AddHousehold extends Component {
             .post(CREATE_HOUSE_URL)
             .send(createHouseObject)
             .then(res => {
-                if (res.body.error_message == "-") {
+                if (res.body.error_message === "-") {
                     let houseMembersObject = {
                         hid: res.body.household_id,
                         usernames: this.state.members
@@ -81,23 +73,26 @@ class AddHousehold extends Component {
                         .post(ADD_MEMBERS_URL)
                         .send(houseMembersObject)
                         .then(res => {
-                            this.goBack("");
+                            this.goBack();
                         })
                 } else {
-                    this.goBack(res.body.error_message);
+                    this.setState(
+                        {
+                            errorMessage: res.body.error_message
+                        }
+                    )
                 }
             });
     }
 
-    goBack(error) {
-        this.props.setPage(<Households error={error + "test"}/>);
+    goBack() {
+        this.props.setPage(<Households/>);
     }
 
     render() {
         return(
             <div id="add-house">
                 <BackArrow goBack={this.goBack}/>
-                {this.state.userError}
                 <div className="add-filler"/>
                 <div className="house-details">
                     <input id="add-house-title-form" type="text" onChange={this.handleTitleChange} value={this.state.title}/>
@@ -110,6 +105,7 @@ class AddHousehold extends Component {
                     </div>
                     <hr className="house-details-linebreak"/>
                     <button id="add-house-submit" onClick={this.submitHouse}>Create House</button>
+                    {this.state.errorMessage}
                 </div>
             </div>
         );

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import CalendarLine from "./CalendarLine";
 import ChoreCalendarBox from "./ChoreCalendarBox";
-import * as ENUMS from "../App/EnumStor";
 
 /**
  * Displays a days worth of chores in a calendar format.

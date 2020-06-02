@@ -17,3 +17,5 @@ export const ADD_MEMBERS_URL = "http://127.0.0.1:8000/chorescheduling/add-users"
 export const REMOVE_CHORE_URL = "http://127.0.0.1:8000/chorescheduling/remove-chores";
 
 export const ADD_CHORE_URL = "http://127.0.0.1:8000/chorescheduling/add-chores";
+
+export const GENERATE_SCHEDULE_URL = "http://127.0.0.1:8000/chorescheduling/generate-schedule";

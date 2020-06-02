@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Chores from "../Chores/Chores";
 import * as URLS from "../App/URLStor"
 import ScheduleButtons from "./ScheduleButtons";
-import BackArrow from "./BackArrow";
+import BackArrow from "../Miscellaneous/BackArrow";
 import Households from "./Households";
 import * as OBJECTS from "../App/ObjectStor";
 import Request from "superagent";

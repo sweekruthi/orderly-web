@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import HouseIcon from "../Households/HouseIcon";
-import MemberIcon from "../Households/MemberIcon";
+import HouseIcon from "./HouseIcon";
+import MemberIcon from "./MemberIcon";
 
 /**
  * A row of icons used for filtering chores by a group.  When in calendar view these simply serve

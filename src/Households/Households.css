@@ -317,6 +317,19 @@
     outline: none;
 }
 
+#edit-schedule-save {
+    position: relative;
+    float: right;
+    height: 4em;
+    width: 12em;
+    right: 3em;
+    bottom: -6em;
+    background-color: transparent;
+    border: solid 1px lightgrey;
+    border-radius: 1em;
+    outline: none;
+}
+
 ::placeholder {
     color: lightgrey;
     opacity: .85;

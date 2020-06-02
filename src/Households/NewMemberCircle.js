@@ -66,7 +66,7 @@ class NewMemberCircle extends Component {
                     <FaPlus className="nm-circle-plus" color="grey"/>
                 </div>
                 <div style={{display: this.state.formDisplay}}>
-                    <input id ="new-member" className="nm-form" type="text" style={{display: "inline"}}/>
+                    <input id ="new-member" className="nm-form" type="text" placeholder="Username" style={{display: "inline"}}/>
                     <button id="nm-submit" style={{display: "inline"}} onClick={this.addNew}>Add</button>
                 </div>
             </div>

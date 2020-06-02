@@ -3,6 +3,12 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+.App {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 h1 {
   font-family: 'Shadows Into Light', cursive;
   font-size: 40pt;

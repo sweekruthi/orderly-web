@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import HouseSchedule from "./HouseSchedule";
-import NewMemberCircle from "./NewMemberCircle";
 import MemberCircle from "./MemberCircle";
 
 /**

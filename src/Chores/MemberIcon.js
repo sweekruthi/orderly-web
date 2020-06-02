@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MemberCircle from "./MemberCircle";
+import MemberCircle from "../Households/MemberCircle";
 
 /**
  * Displays an icon for a household

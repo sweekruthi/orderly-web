@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Chores from "../Chores/Chores";
+import Chores from "./Chores";
 import * as URLS from "../App/URLStor"
 import * as OBJECTS from "../App/ObjectStor";
 import Cookies from 'js-cookie';
