@@ -17,6 +17,7 @@ class App extends React.Component{
             <div className="App">
                 <h1 id="heading">Orderly</h1>
                 <Router>
+                    <Login path="/"/>
                     <Login path='/login'/>
                     <Home path="home"/>
                 </Router>
