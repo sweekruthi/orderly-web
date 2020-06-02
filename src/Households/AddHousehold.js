@@ -3,6 +3,7 @@ import NewMemberCircle from "./NewMemberCircle";
 import MemberCircle from "./MemberCircle";
 import Households from "./Households";
 import BackArrow from "../Miscellaneous/BackArrow";
+import Cookies from 'js-cookie';
 import Request from "superagent";
 import {CREATE_HOUSE_URL} from "../App/URLStor";
 import {ADD_MEMBERS_URL} from "../App/URLStor";
@@ -58,7 +59,8 @@ class AddHousehold extends Component {
         this.props.addHouse(newHouse);*/
 
         let createHouseObject = {
-            name: this.state.title
+            name: this.state.title,
+            creator: Cookies.get('username')
         };
         Request
             .post(CREATE_HOUSE_URL)

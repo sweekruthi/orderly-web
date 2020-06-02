@@ -93,4 +93,15 @@
 .submit-title {
     font-size: 18pt;
     margin-left: 1em;
+    margin-bottom: 3em;
+}
+
+.approved-title {
+    font-size: 18pt;
+    margin-left: 1em;
+}
+
+.submit-details {
+    display: flex;
+    flex-direction: column;
 }

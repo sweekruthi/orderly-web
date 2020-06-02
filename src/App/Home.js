@@ -45,13 +45,12 @@ class Home extends React.Component {
         if (!accessToken) {
             window.location.replace('/login');
             return null;
-        } else {
-            return (<div className="App">
-                {<p>Hi {this.state.user}!</p>}
-                <NavBar setPage={this.setPage}/>
-                {this.currTab()}
-            </div>);
         }
+        return (<div className="App">
+            {<p>Hi {this.state.user}!</p>}
+            <NavBar setPage={this.setPage}/>
+            {this.currTab()}
+        </div>);
     }
 
     setPage(currPage) {

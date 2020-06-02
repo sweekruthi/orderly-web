@@ -9,7 +9,8 @@ class SubmitChoreMessage extends Component {
         super(props);
         this.state = {
             files: [],
-            name: this.getSubmitter()
+            name: this.getSubmitter(),
+            members: []
         }
     }
 
@@ -44,6 +45,10 @@ class SubmitChoreMessage extends Component {
         return result;
     }
 
+    createMembersCircle() {
+
+    }
+
     render() {
         return (
             <div className='submit-message'>
@@ -52,7 +57,13 @@ class SubmitChoreMessage extends Component {
                     {this.setContent()}
                 </div>
                 </DragAndDrop>
-                <div className='submit-title'>Submitted By: {this.state.name}</div>
+                <div className='submit-details'>
+                    <div className='submit-title'>Submitted By: {this.state.name}</div>
+                    <div>
+                        <div className='approved-title'>Approved By: </div>
+                        {this.createMemberCircles()}
+                    </div>
+                </div>
             </div>
         )
     }
