@@ -53,6 +53,7 @@
 }
 
 .submit-message {
+    position: relative;
     border-top: solid lightgrey 1px;
     border-bottom: solid lightgrey 1px;
     flex-basis: 20%;
@@ -93,7 +94,17 @@
 .submit-title {
     font-size: 18pt;
     margin-left: 1em;
+    margin-top: .7em;
     margin-bottom: 3em;
+}
+
+.submit-approve {
+    display: flex;
+    flex-direction: row;
+}
+
+.approve-member-spacing {
+    margin-left: 2em;
 }
 
 .approved-title {
@@ -104,4 +115,24 @@
 .submit-details {
     display: flex;
     flex-direction: column;
+}
+
+.submit-button {
+    position: absolute;
+    height: 3.5em;
+    width: 6em;
+    border: solid lightgrey 1px;
+    outline: none;
+    background-color: transparent;
+    border-radius: .5em;
+    right: 4em;
+    bottom: 2em;
+}
+
+.submit-button:hover {
+    background-color: lightgrey;
+}
+
+.submit-button-hidden {
+    visibility: hidden;
 }

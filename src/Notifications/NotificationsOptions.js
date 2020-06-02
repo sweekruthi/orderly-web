@@ -19,9 +19,9 @@ class NotificationsOptions extends Component {
         return(
           <div id="options">
               <OptionButton title='Submit Chore' onClick={this.selectOption} mgsInProgress={this.props.mgsInProgress}
-                            addMessage={() => this.props.addMessage(<SubmitChoreMessage/>)}/>
+                            addMessage={() => this.props.addMessage(<SubmitChoreMessage submit={this.props.submit}/>)}/>
               <OptionButton title='Trade Chore' onClick={this.selectOption} mgsInProgress={this.props.mgsInProgress}
-                            addMessage={() => this.props.addMessage(<SubmitChoreMessage/>)}/>
+                            addMessage={() => this.props.addMessage(<SubmitChoreMessage submit={this.props.submit}/>)}/>
           </div>
         );
     }

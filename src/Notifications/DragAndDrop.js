@@ -16,29 +16,35 @@ class DragAndDrop extends Component {
     handleDragIn = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        this.dragCounter++
-        if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-            this.setState({drag: true})
+        if (!this.props.submitted) {
+            this.dragCounter++
+            if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+                this.setState({drag: true})
+            }
         }
     }
 
     handleDragOut = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        this.dragCounter--
-        if (this.dragCounter <= 0) {
-            this.setState({drag: false})
+        if (!this.props.submitted) {
+            this.dragCounter--
+            if (this.dragCounter <= 0) {
+                this.setState({drag: false})
+            }
         }
     }
 
     handleDrop = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        this.setState({drag: false})
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            this.props.handleDrop(e.dataTransfer.files)
-            e.dataTransfer.clearData()
-            this.dragCounter = 0
+        if (!this.props.submitted) {
+            this.setState({drag: false})
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                this.props.handleDrop(e.dataTransfer.files)
+                e.dataTransfer.clearData()
+                this.dragCounter = 0
+            }
         }
     }
 

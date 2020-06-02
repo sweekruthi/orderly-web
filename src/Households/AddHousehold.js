@@ -49,34 +49,19 @@ class AddHousehold extends Component {
         );
     }
 
-    submitHouse() {
-        /*let users = [];
-        for (let member in this.state.members) {
-            users.push(new OBJECTS.User(member + "_id", member, "house_1_id"));
-        }
-
-        let newHouse = new OBJECTS.House(1, this.state.title, users, 0, new Date());
-        this.props.addHouse(newHouse);*/
+    async submitHouse() {
+        let houseID = '-'
 
         let createHouseObject = {
             name: this.state.title,
             creator: Cookies.get('username')
         };
-        Request
+        await Request
             .post(CREATE_HOUSE_URL)
             .send(createHouseObject)
             .then(res => {
                 if (res.body.error_message === "-") {
-                    let houseMembersObject = {
-                        hid: res.body.household_id,
-                        usernames: this.state.members
-                    };
-                    Request
-                        .post(ADD_MEMBERS_URL)
-                        .send(houseMembersObject)
-                        .then(res => {
-                            this.goBack();
-                        })
+                    houseID = res.body.household_id;
                 } else {
                     this.setState(
                         {
@@ -85,6 +70,25 @@ class AddHousehold extends Component {
                     )
                 }
             });
+
+        let houseMembersObject = {
+            hid: houseID,
+            usernames: this.state.members
+        };
+        await Request
+            .post(ADD_MEMBERS_URL)
+            .send(houseMembersObject)
+            .then(() => {
+                this.goBack();
+            })
+    }
+
+    createHouse() {
+
+    }
+
+    addUsers() {
+
     }
 
     goBack() {

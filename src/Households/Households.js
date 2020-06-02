@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import Request from "superagent";
 import * as URLS from "../App/URLStor";
 
-let UNDEFINED = "";
+let UNDEFINED = "-";
 
 /**
  * Displays all information related to the households a user is a member of.
@@ -15,35 +15,54 @@ class Households extends Component {
     constructor(props) {
         super(props);
 
-        let houses = this.getHouses();
-        this.getUsers(houses);
-
         this.state = {
-            houses: houses,
-            contentPage: <HouseholdViewer houses={houses} addHouse={this.addHouse} setPage={this.setHousePage}/>,
+            houses: {},
+            contentPage: <div/>,
+            memberLength: 0
         };
         this.addHouse = this.addHouse.bind(this);
     }
 
-    getHouses() {
-        let houses = [];
-        let house = new OBJECTS.House("", "", [], 0, 0);
+    async componentDidMount() {
+        let houses = await this.getHouses();
+        houses = await this.getHouseScheduleInfo(houses);
+        houses = await this.getUsers(houses);
+        this.setState(
+            {
+                houses: houses,
+                contentPage: <HouseholdViewer houses={houses} addHouse={this.addHouse}
+                                              setPage={this.setHousePage} memberLength={this.state.memberLength}/>
+            }
+        )
+    }
+
+    async getHouses() {
+        let houses = {};
+        let house = new OBJECTS.House("-", "-", [], 0, 0);
 
         let userRequestObject = {
             username: Cookies.get('username')
         };
-        Request
+        await Request
             .post(URLS.USER_INFO_URL)
             .send(userRequestObject)
             .then(res => {
-                house.id = res.body.household_id;
-                house.name = res.body.household_name;
+                if (res.body.household_id !== UNDEFINED) {
+                    house.id = res.body.household_id;
+                    house.title = res.body.household_name;
+                    houses[house.id] = house;
+                }
             });
-        if (house.id !== UNDEFINED) {
+
+        return houses;
+    }
+
+    async getHouseScheduleInfo(houses) {
+        for (let house in houses) {
             let houseRequestObject = {
                 hid: parseInt(house.id)
             };
-            Request
+            await Request
                 .post(URLS.HOUSE_FULL_SCH_URL)
                 .send(houseRequestObject)
                 .then(res => {
@@ -52,30 +71,34 @@ class Households extends Component {
                         house.startDate = parseInt(res.body.start_date);
                     }
                 });
-
-            houses[house.id] = house;
         }
 
-        /*houses["1"] = new OBJECTS.House("1", "House 1", [], 4,  1591059947);*/
-
-       return houses;
+        return houses;
     }
 
-    getUsers(houses) {
+    async getUsers(houses) {
         for (let house in houses) {
             let memberRequestObject = {
-                hid: house
+                hid: parseInt(house.id)
             };
-            Request
+            await Request
                 .post(URLS.HOUSE_MEMBERS_URL)
                 .send(memberRequestObject)
                 .then(res => {
-                    for (let person in res.body.people) {
-                        let user = OBJECTS.User(person.pid, person.username, person.first_name, person.last_name, house);
-                        houses[house].members.push(user);
+                    for (let i = 0; i < res.body.people.length; i++) {
+                        let person = res.body.people[i];
+                        let user = new OBJECTS.User(person.pid, person.username, person.first_name, person.last_name, house.id);
+                        houses[house.id].members.push(user);
                     }
+                    this.setState(
+                        {
+                            memberLength: res.body.people.length
+                        }
+                    )
                 });
         }
+
+        return houses;
     }
 
     addHouse = (houseInfo) => {

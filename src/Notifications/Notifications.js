@@ -3,7 +3,6 @@ import './Notifications.css';
 import NotificationsFeed from "./NotificationsFeed";
 import NotificationsOptions from "./NotificationsOptions";
 
-
 class Notifications extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +33,8 @@ class Notifications extends Component {
         return (
             <div id='notifications'>
                 <NotificationsFeed mgs={this.state.mgs}/>
-                <NotificationsOptions addMessage={this.addMessage} mgsInProgress={this.state.mgsInProgress}/>
+                <NotificationsOptions addMessage={this.addMessage} mgsInProgress={this.state.mgsInProgress}
+                                      submit={this.submitChore}/>
             </div>
         )
     }

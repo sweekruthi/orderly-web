@@ -23,7 +23,8 @@ class ScheduleButtons extends Component {
                         onClick={() => this.props.setPage(<ScheduleAdd house={this.props.house} chores={this.props.chores}
                                                                        goBack={this.goBack}/>)}>
                     Add Chore</button>
-                <button id="edit-chore" className="chore-button" onClick={() => this.props.setPage(<ScheduleEdit goBack={this.goBack}/>)}>
+                <button id="edit-chore" className="chore-button" onClick={() => this.props.setPage(<ScheduleEdit house={this.props.house}
+                                                                                                                 goBack={this.goBack}/>)}>
                     Generate New Schedule</button>
             </div>
         );

@@ -3,6 +3,7 @@ import DragAndDrop from "./DragAndDrop";
 import Request from "superagent";
 import {USER_INFO_URL} from "../App/URLStor";
 import Cookies from 'js-cookie';
+import MemberCircle from "../Households/MemberCircle";
 
 class SubmitChoreMessage extends Component {
     constructor(props) {
@@ -10,17 +11,22 @@ class SubmitChoreMessage extends Component {
         this.state = {
             files: [],
             name: this.getSubmitter(),
-            members: []
+            members: ['member 1', 'member 2'],
+            submitted: false
         }
+        this.createMemberCircles = this.createMemberCircles.bind(this);
+        this.submitMessage = this.submitMessage.bind(this);
     }
 
     handleDrop = (files) => {
-        let fileList = this.state.files
-        for (let i = 0; i < files.length; i++) {
-            if (!files[i].name) return
-            fileList.push(URL.createObjectURL(files[i]))
+        if (!this.state.submitted) {
+            let fileList = this.state.files
+            for (let i = 0; i < files.length; i++) {
+                if (!files[i].name) return
+                fileList.push(URL.createObjectURL(files[i]))
+            }
+            this.setState({files: fileList})
         }
-        this.setState({files: fileList})
     }
 
     setContent() {
@@ -45,25 +51,43 @@ class SubmitChoreMessage extends Component {
         return result;
     }
 
-    createMembersCircle() {
+    createMemberCircles() {
+        let members = [];
+        for (let i = 0; i < this.state.members.length; i++) {
+            members.push(<MemberCircle circleSize={20} nameSize="10pt" member={this.state.members[i]}
+                                       memberSpacing='approve-member-spacing'/>)
+        }
 
+        return members;
+    }
+
+    submitMessage(e) {
+        this.props.submit();
+        e.currentTarget.classList.toggle('submit-button-hidden');
+        document.querySelector('.option-button-selected').classList.toggle('option-button-selected');
+        this.setState(
+            {
+                submitted: true
+            }
+        )
     }
 
     render() {
         return (
             <div className='submit-message'>
-                <DragAndDrop handleDrop={this.handleDrop}>
+                <DragAndDrop handleDrop={this.handleDrop} submitted={this.state.submitted}>
                 <div style={{height: 150, width: 150}}>
                     {this.setContent()}
                 </div>
                 </DragAndDrop>
                 <div className='submit-details'>
                     <div className='submit-title'>Submitted By: {this.state.name}</div>
-                    <div>
+                    <div className='submit-approve'>
                         <div className='approved-title'>Approved By: </div>
                         {this.createMemberCircles()}
                     </div>
                 </div>
+                <button className='submit-button' onClick={this.submitMessage}>Submit</button>
             </div>
         )
     }

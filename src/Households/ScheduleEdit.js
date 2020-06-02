@@ -12,6 +12,11 @@ class ScheduleEdit extends Component {
             startingYear: "",
             numWeeks: ""
         }
+        this.handleDayChange = this.handleDayChange.bind(this);
+        this.handleMonthChange = this.handleMonthChange.bind(this);
+        this.handleYearChange = this.handleYearChange.bind(this);
+        this.handleWeekChange = this.handleWeekChange.bind(this);
+        this.submitSchedule = this.submitSchedule.bind(this);
     }
 
     handleDayChange(e) {
@@ -46,17 +51,19 @@ class ScheduleEdit extends Component {
         )
     }
 
-    submitSchedule() {
+    async submitSchedule() {
         let scheduleRequestObject = {
-            hid: this.props.hid,
-            num_weeks: this.state.numWeeks,
-            month: this.state.startingMonth,
-            day: this.state.startingDay,
-            year: this.state.startingYear
+            hid: parseInt(this.props.house.id),
+            num_weeks: parseInt(this.state.numWeeks),
+            month: parseInt(this.state.startingMonth),
+            day: parseInt(this.state.startingDay),
+            year: parseInt(this.state.startingYear)
         }
-        Request
+        await Request
             .post(GENERATE_SCHEDULE_URL)
             .send(scheduleRequestObject)
+
+        this.props.goBack()
     }
 
     render() {

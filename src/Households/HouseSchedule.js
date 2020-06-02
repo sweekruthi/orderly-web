@@ -12,29 +12,40 @@ class HouseSchedule extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            users: this.getMembers(),
-            chores: this.getChores()
+            users: {},
+            chores: {}
         };
 
         this.goBack = this.goBack.bind(this);
         this.getCurrWeek = this.getCurrWeek.bind(this);
     }
 
+    async componentDidMount() {
+        this.setState(
+            {
+                users: await this.getMembers(),
+                chores: await this.getChores()
+            }
+        )
+    }
+
     goBack() {
         this.props.setPage(<Households/>);
     }
 
-    getChores() {
+    async getChores() {
         let chores = {};
 
         let choreRequestObject = {
             hid: this.props.house.id
         };
 
-        Request
+        await Request
             .post(URLS.HOUSE_FULL_SCH_URL)
             .send(choreRequestObject)
             .then(res => {
+                this.props.house.numWeeks = res.body.num_weeks;
+                this.props.house.startDate = res.body.start_date;
                 for (let i = 0; i < res.body.weeks.length; i++) {
                     let week = res.body.weeks[i];
                     for (let chore in week) {
@@ -43,16 +54,15 @@ class HouseSchedule extends Component {
                     }
                 }
             })
-
     }
 
-    getMembers() {
+    async getMembers() {
         let members = [];
 
         let memberRequestObject = {
             hid: this.props.house.id
         };
-        Request
+        await Request
             .post(HOUSE_MEMBERS_URL)
             .send(memberRequestObject)
             .then(res => {

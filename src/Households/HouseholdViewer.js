@@ -18,7 +18,7 @@ class HouseholdViewer extends Component {
     }
 
     getInitHouse() {
-        let initHouse = '';
+        let initHouse = '-';
         for (let house in this.props.houses) {
             initHouse = this.props.houses[house].id;
             break;
@@ -40,7 +40,8 @@ class HouseholdViewer extends Component {
                 <HouseholdsList houses={this.props.houses} initSelected={this.state.selectedHouse}
                                 addHouse={this.props.addHouse} setSelectedHouse={this.setSelectedHouse}
                                 setPage={this.props.setPage}/>
-                <HouseholdsDetails house={this.props.houses[this.state.selectedHouse]} setPage={this.props.setPage}/>
+                <HouseholdsDetails house={this.props.houses[this.state.selectedHouse]} setPage={this.props.setPage}
+                                    memberLength={this.props.memberLength}/>
             </div>
         );
     }

@@ -11,22 +11,12 @@ class HouseholdChoreList extends Component {
         this.state = {
             choreButtons: this.createInfoButtons()
         };
-        this.createChore = this.createChore.bind(this);
         this.toggleHouseButton = this.toggleHouseButton.bind(this);
         this.createInfoButtons = this.createInfoButtons.bind(this);
     }
 
     componentDidMount() {
         document.querySelector('.house-button').classList.add('house-button-selected');
-    }
-
-    /**
-     * Creates a new chore and adds it to the list of chores for the household.
-     */
-    createChore() {
-        /*make api call first to register a new chore with the database, get chore id from api call. create new chore
-        * on the front end with id*/
-
     }
 
     /**

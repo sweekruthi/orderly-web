@@ -41,6 +41,7 @@ class HouseholdsDetails extends Component {
                         <div id="house-details-members-list">
                             {this.props.house.members.map((value) => {
                             return <MemberCircle member={value.username} memberSpacing='house-details-member' circleSize="36pt" nameSize="14pt"/>})}
+                            {this.props.memberLength}
                         </div>
                         <hr className="house-details-linebreak"/>
                         <div className="house-details-nav-away">
