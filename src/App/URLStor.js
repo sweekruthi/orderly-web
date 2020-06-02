@@ -6,7 +6,7 @@ export const CHORE_INFO_URL = "http://127.0.0.1:8000/choremanagement/get-chore-i
 
 export const USER_INFO_URL = "http://127.0.0.1:8000/chorescheduling/get-user-details";
 
-export const ACTIVE_USER_URL = "http://127.0.0.1:8000/chorescheduling/get-active-user"
+export const ACTIVE_USER_URL = "http://127.0.0.1:8000/chorescheduling/get-active-user";
 
 export const HOUSE_MEMBERS_URL = "http://127.0.0.1:8000/chorescheduling/get-household-users";
 

@@ -90,6 +90,7 @@ class Households extends Component {
                         let user = new OBJECTS.User(person.pid, person.username, person.first_name, person.last_name, house.id);
                         houses[house.id].members.push(user);
                     }
+                    console.log(res.body.num_people);
                     this.setState(
                         {
                             memberLength: res.body.people.length

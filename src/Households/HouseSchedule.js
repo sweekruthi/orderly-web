@@ -44,16 +44,20 @@ class HouseSchedule extends Component {
             .post(URLS.HOUSE_FULL_SCH_URL)
             .send(choreRequestObject)
             .then(res => {
-                this.props.house.numWeeks = res.body.num_weeks;
-                this.props.house.startDate = res.body.start_date;
                 for (let i = 0; i < res.body.weeks.length; i++) {
-                    let week = res.body.weeks[i];
-                    for (let chore in week) {
-                        chores[chore.assigned_to] = new OBJECTS.Chore(i + chore.chore_name + "", this.props.house.id, chore.assigned_to,
-                            false, i, chore.chore_name, chore.chore_description);
+                    let week = res.body.weeks[i]["week" + i];
+                    for (let i = 0; i < week.length; i++) {
+                        let chore = week[i];
+                        if (chores[chore.assigned_to] === undefined) {
+                            chores[chore.assigned_to] = [];
+                        }
+                        chores[chore.assigned_to].push(new OBJECTS.Chore(chore.chore_name + "", this.props.house.id, chore.assigned_to,
+                            false, i, chore.chore_name, chore.chore_description));
+                        console.log(chore.assigned_to)
                     }
                 }
-            })
+            });
+        return chores;
     }
 
     async getMembers() {

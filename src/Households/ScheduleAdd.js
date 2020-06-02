@@ -3,7 +3,7 @@ import HouseholdChoreList from "./HouseholdChoreList";
 import HouseholdChoreDetails from "./HouseholdChoreDetails";
 import * as OBJECTS from "../App/ObjectStor";
 import Request from "superagent";
-import {GENERATE_SCHEDULE_URL, REMOVE_CHORE_URL} from "../App/URLStor";
+import {GENERATE_SCHEDULE_URL, HOUSE_FULL_SCH_URL, REMOVE_CHORE_URL} from "../App/URLStor";
 import {ADD_CHORE_URL} from "../App/URLStor";
 
 let choreID = 1;
@@ -30,16 +30,20 @@ class ScheduleAdd extends Component {
         this.deleteChore = this.deleteChore.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
         this.showDetails = this.showDetails.bind(this);
+        this.getSchedule = this.getSchedule.bind(this);
+        this.generateSchedule = this.generateSchedule.bind(this);
     }
 
     unWrapChores() {
         let unWrappedChores = {};
         for (let userID in this.props.chores) {
             let userChores = this.props.chores[userID];
+            console.log(userChores);
             for (let i = 0; i < userChores.length; i++) {
                 unWrappedChores[userChores[i].id] = userChores[i];
             }
         }
+        console.log(unWrappedChores);
 
         return unWrappedChores;
     }
@@ -100,6 +104,7 @@ class ScheduleAdd extends Component {
     async deleteChore(id) {
         await this.removeFromBackend(id);
         delete this.state.frontEndChores[id];
+        await this.generateSchedule()
     }
 
     async saveChanges(id) {
@@ -129,18 +134,60 @@ class ScheduleAdd extends Component {
                         status: res.body.added_chore_names
                     }
                 )
-            });
+            })
+            .catch(err => {
+                this.setState(
+                    {
+                        status: err.message()
+                    }
+                )
+            })
+
+        this.generateSchedule()
+    }
+
+    async generateSchedule() {
+        let currSchedule = this.getSchedule();
+        let numWeeks = 1;
+        let startDate = new Date();
+        if (currSchedule.numWeeks !== undefined) {
+            numWeeks = currSchedule.numWeeks;
+        }
+
+        if (currSchedule.startDate !== undefined) {
+            startDate = new Date(currSchedule.startDate);
+        }
 
         let scheduleRequestObject = {
             hid: this.props.house.id,
-            num_weeks: this.props.house.weekNum,
-            month: new Date().getDate(),
-            day: new Date().getMonth(),
-            year: new Date().getFullYear()
+            num_weeks: numWeeks,
+            month: startDate.getDate(),
+            day: startDate.getMonth(),
+            year: startDate.getFullYear()
         }
         await Request
             .post(GENERATE_SCHEDULE_URL)
             .send(scheduleRequestObject)
+            .catch(err => {
+                this.setState({
+                    status: "schedule contains chores with duplicate names"
+                })
+            })
+    }
+
+    async getSchedule() {
+        let scheduleRequestObject = {
+            hid: this.props.house.id
+        }
+        Request
+            .post(HOUSE_FULL_SCH_URL)
+            .send(scheduleRequestObject)
+            .then(res => {
+                return {
+                    numWeeks: res.body.num_weeks,
+                    startDate: res.body.start_date
+                }
+            })
     }
 
     showDetails() {
