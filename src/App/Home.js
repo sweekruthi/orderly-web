@@ -3,10 +3,7 @@ import './App.css';
 import Households from "../Households/Households";
 import NavBar from "./NavBar";
 import Notifications from '../Notifications/Notifications';
-import { Redirect } from '@reach/router/lib/history';
 import Cookies from 'js-cookie';
-import { access } from 'fs';
-import { navigate } from '@reach/router';
 import IndividualSchedule from "../Chores/IndividualSchedule";
 
 
@@ -47,7 +44,7 @@ class Home extends React.Component {
             return null;
         }
         return (<div className="App">
-            {<p>Hi {this.state.user}!</p>}
+            {<p>Hi {accessToken}!</p>}
             <NavBar setPage={this.setPage}/>
             {this.currTab()}
         </div>);

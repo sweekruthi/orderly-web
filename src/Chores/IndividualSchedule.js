@@ -11,89 +11,60 @@ class IndividualSchedule extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            houses: this.getHouses()
+            chores: {}
         };
         this.getCurrWeeks = this.getCurrWeeks.bind(this);
     }
 
-    getHouses() {
-        let houses = {};
-        let house = new OBJECTS.House("", "", [], 0, 0);
-
-        let userRequestObject = {
-            username: Cookies.get('username')
-        };
-        Request
-            .post(URLS.USER_INFO_URL)
-            .send(userRequestObject)
-            .then(res => {
-                house.id = res.body.household_id;
-                house.title = res.body.household_name;
-            });
-
-        this.setState(
-            {
-                houseID: house.id
-            }
-        );
-        if (house.id !== UNDEFINED) {
-            let houseRequestObject = {
-                hid: parseInt(house.id)
-            };
-            Request
-                .post(URLS.HOUSE_FULL_SCH_URL)
-                .send(houseRequestObject)
-                .then(res => {
-                    if (res.body.error_message === UNDEFINED) {
-                        house.weekNum = parseInt(res.body.num_weeks);
-                        house.startDate = parseInt(res.body.start_date);
-                    }
-                });
-
-            houses[house.id] = house;
+    async componentDidMount() {
+        const choreIds = await this.getChores();
+        let choreInfo = {};
+        for (let key in choreIds) {
+            const id = choreIds[key];
+            const chore = await this.getChoreInfo(id);
+            choreInfo[key] = chore;
         }
-
-        return houses;
+        this.setState({
+            chores: choreInfo
+        });
     }
 
-    getChores() {
+    async getChores() {
         /*For each house id make a call to get the houses name, schedule_start,
         * and num weeks.  Calculate the current week the houses schedule is on by finding the difference in weeks between
         * the start date and today's date, and modding by the houses num weeks. Make a call to view_individual_chores, passing
         * in a house_id and num_week. create a new entry in chores with the key equal to the house name and values equal to the
         * chore id's.*/
 
-        let chores = {};
+        let choreIds = [];
 
-        for (let house in this.state.houses) {
-            let choreRequestObject = {
-                pid: Cookies.get('pid')
-            };
-            Request
-                .post(URLS.IND_SCH_URL)
-                .send(choreRequestObject)
-                .then(res => {
-                    let choreList = res.body.chore_list;
-                    for (let choreID in choreList) {
-                        chores[choreID] = this.getChoreInfo(choreID);
-                    }
-                });
-        }
+        let choreRequestObject = {
+            pid: Cookies.get('pid')
+        };
+        await Request
+            .post(URLS.IND_SCH_URL)
+            .send(choreRequestObject)
+            .then(res => {
+                choreIds = res.body.chore_list;
 
-        return chores;
+            });
+
+        return choreIds;
     }
 
-    getChoreInfo(cid) {
+    async getChoreInfo(cid) {
         let choreRequestObject = {
             cid: parseInt(cid)
         };
-        Request
+        let chore = {};
+        await Request
             .post(URLS.CHORE_INFO_URL)
             .send(choreRequestObject)
             .then(res => {
-                return new OBJECTS.Chore(res.body.cid, res.body.hid, res.body.assigned_to, res.body.completed,
+                chore = new OBJECTS.Chore(res.body.cid, res.body.hid, res.body.assigned_to, res.body.completed,
                     res.body.week_num, res.body.name, res.body.description);
             });
+        return chore;
     }
 
     getCurrWeeks(weekStart) {
@@ -115,7 +86,7 @@ class IndividualSchedule extends Component {
     render() {
         return(
             <div>
-                <Chores iconType={'house'} filters={this.state.houses} chores={this.getChores()}
+                <Chores iconType={'house'} filters={this.state.houses} chores={this.state.chores}
                         getCurrWeeks={this.getCurrWeeks} houseID={this.state.houseID}/>
             </div>
         )

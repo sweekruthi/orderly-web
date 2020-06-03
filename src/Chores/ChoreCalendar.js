@@ -14,7 +14,7 @@ class ChoreCalendar extends Component {
     addLines() {
         let lines = [];
         for (let i = 0; i < 10; i++) {
-            lines.push(<CalendarLine/>);
+            lines.push(<CalendarLine key={`CalenderLine${i}`}/>);
         }
         return lines;
     }
@@ -23,13 +23,11 @@ class ChoreCalendar extends Component {
         let choreBoxes = [];
         let filterIndex = 0;
         for (let filter in this.props.chores) {
-            let currChores = this.props.chores[filter];
-            for (let i = 0; i < currChores.length; i++) {
-                let currChore = currChores[i];
-                if (this.props.currWeekNums[filter] === currChore.weekNum && this.props.rightType(currChore.completed)) {
-                    choreBoxes.push(<ChoreCalendarBox choreTitle={currChore.title} row={i} column={filterIndex}/>);
-                }
-            }
+            let currChore = this.props.chores[filter];
+            console.log("current chore is", currChore);
+            // if (this.props.currWeekNums[filter] === currChore.weekNum && this.props.rightType(currChore.completed)) {
+                choreBoxes.push(<ChoreCalendarBox choreTitle={currChore.title} row={filter} column={filterIndex}/>);
+            // }
             filterIndex++;
         }
 

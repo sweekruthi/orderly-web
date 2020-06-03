@@ -25,13 +25,11 @@ class Chores extends Component {
         weekEnd.setHours(0,0,0,0);
 
         this.getInitIcon = this.getInitIcon.bind(this);
-
         this.state = {
             choreView: ENUMS.ChoreView.CALENDAR,
             choreType: ENUMS.ChoreType.UPCOMING,
-            chores: this.props.chores,
             filters: this.props.filters,
-            currWeekNums: this.props.getCurrWeeks(weekStart),
+            currWeekNums: 0,
             selectedIcon: this.getInitIcon(),
             weekStart: weekStart,
             weekEnd: weekEnd,
@@ -133,6 +131,9 @@ class Chores extends Component {
      */
     moveWeek(numWeeks) {
         this.moveDate(numWeeks, 7);
+        this.setState({
+            currWeekNums: this.state.currWeekNums + numWeeks
+        })
     }
 
     moveDate(numMoves, step) {
@@ -154,7 +155,6 @@ class Chores extends Component {
                 year: newDate.getFullYear(),
                 weekStart: newStart,
                 weekEnd: newEnd,
-                currWeekNums: this.props.getCurrWeeks(newStart),
                 inPast: newEnd <= new Date()
             }
         );
@@ -194,16 +194,16 @@ class Chores extends Component {
             <div id="chores">
                 <div id="left-column">
                     {this.props.backArrow}
-                    <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
+                    {/* <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/> */}
                     <ChoreTypeButtons initType={this.state.choreType} setChoreType={this.setChoreType}/>
                 </div>
 
                 <div id="middle-column">
-                    <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek}/>
+                    <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek} weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
                     <ColumnFilter iconType={this.props.iconType} iconObjs={this.state.filters} selectIcon={this.setSelectedIcon}
                                   choreView={this.state.choreView}/>
                     <ChoreViewPage choreView={this.state.choreView} choreType={this.state.choreType}
-                                   chores={this.state.chores} selectedIcon={this.state.selectedIcon}
+                                   chores={this.props.chores} selectedIcon={this.state.selectedIcon}
                                    currWeekNums={this.state.currWeekNums} inPast={this.state.inPast}/>
                 </div>
 
