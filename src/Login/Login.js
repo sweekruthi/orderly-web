@@ -78,7 +78,6 @@ function Login() {
             .post(url)
             .send(requestObject)
             .then(res => {
-                console.log("data is", res.body);
                 if (res.body.error_message === "-") {
                     setCreateMessage(`Account has been successfully created! Please Login. ` + createPassword + " " + createEmail);
                 } else {
