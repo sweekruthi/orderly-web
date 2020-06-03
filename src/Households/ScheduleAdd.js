@@ -6,7 +6,7 @@ import Request from "superagent";
 import {GENERATE_SCHEDULE_URL, HOUSE_FULL_SCH_URL, REMOVE_CHORE_URL} from "../App/URLStor";
 import {ADD_CHORE_URL} from "../App/URLStor";
 
-let choreID = 1;
+let choreID = 2;
 
 class ScheduleAdd extends Component {
     constructor(props) {
@@ -38,24 +38,20 @@ class ScheduleAdd extends Component {
         let unWrappedChores = {};
         for (let userID in this.props.chores) {
             let userChores = this.props.chores[userID];
-            console.log(userChores);
             for (let i = 0; i < userChores.length; i++) {
                 unWrappedChores[userChores[i].id] = userChores[i];
             }
         }
-        console.log(unWrappedChores);
-
         return unWrappedChores;
     }
 
     getInitChore(chores) {
         let initChore = '';
         for (let chore in chores) {
-            initChore = chore.id;
+            let currChore = chores[chore];
+            initChore = currChore.id;
             break;
         }
-
-
         return initChore;
     }
 
@@ -75,14 +71,10 @@ class ScheduleAdd extends Component {
         let id = choreID + "";
         this.setState(prevState => {
             let frontEndChores = Object.assign({}, prevState.frontEndChores);
-            frontEndChores[id] = new OBJECTS.Chore(id, "", "", false, 0, "Chore " + id, "");
+            frontEndChores[id] = new OBJECTS.Chore(id, this.props.house.id, "", false, 0, "Chore " + id, "");
             return { frontEndChores };
         });
-        this.setState(
-            {
-                selectedChore: id
-            }
-        )
+        this.displayChoreInfo(id);
     }
 
     async removeFromBackend(id) {
@@ -194,6 +186,7 @@ class ScheduleAdd extends Component {
         if (Object.keys(this.state.frontEndChores).length === 0) {
             return <div/>
         } else {
+            console.log(this.state.frontEndChores[this.state.selectedChore])
             return <HouseholdChoreDetails chore={this.state.frontEndChores[this.state.selectedChore]} saveChanges={this.saveChanges}
                                           deleteChore={this.deleteChore} status={this.state.status}/>
         }

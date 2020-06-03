@@ -46,12 +46,12 @@ class HouseSchedule extends Component {
             .then(res => {
                 for (let i = 0; i < res.body.weeks.length; i++) {
                     let week = res.body.weeks[i]["week" + i];
-                    for (let i = 0; i < week.length; i++) {
-                        let chore = week[i];
+                    for (let j = 0; j < week.length; j++) {
+                        let chore = week[j];
                         if (chores[chore.assigned_to] === undefined) {
                             chores[chore.assigned_to] = [];
                         }
-                        chores[chore.assigned_to].push(new OBJECTS.Chore(chore.chore_name + "", this.props.house.id, chore.assigned_to,
+                        chores[chore.assigned_to].push(new OBJECTS.Chore(chore.chore_name, this.props.house.id, chore.assigned_to,
                             false, i, chore.chore_name, chore.chore_description));
                         console.log(chore.assigned_to)
                     }

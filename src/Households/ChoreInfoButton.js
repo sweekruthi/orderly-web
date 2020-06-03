@@ -8,6 +8,7 @@ class ChoreInfoButton extends Component {
 
     handleClick(e) {
         this.props.displayChoreInfo(this.props.chore.id);
+        console.log(this.props.chore.id)
         this.props.toggleButton(e);
     }
 
