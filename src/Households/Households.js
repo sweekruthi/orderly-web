@@ -18,20 +18,18 @@ class Households extends Component {
         this.state = {
             houses: {},
             contentPage: <div/>,
-            memberLength: 0
         };
         this.addHouse = this.addHouse.bind(this);
     }
 
     async componentDidMount() {
         let houses = await this.getHouses();
-        houses = await this.getHouseScheduleInfo(houses);
         houses = await this.getUsers(houses);
+
         this.setState(
             {
                 houses: houses,
-                contentPage: <HouseholdViewer houses={houses} addHouse={this.addHouse}
-                                              setPage={this.setHousePage} memberLength={this.state.memberLength}/>
+                contentPage: <HouseholdViewer houses={houses} addHouse={this.addHouse} setPage={this.setHousePage}/>
             }
         )
     }
@@ -54,6 +52,7 @@ class Households extends Component {
                 }
             });
 
+        
         return houses;
     }
 
@@ -77,7 +76,8 @@ class Households extends Component {
     }
 
     async getUsers(houses) {
-        for (let house in houses) {
+        for (let key in houses) {
+            const house = houses[key];
             let memberRequestObject = {
                 hid: parseInt(house.id)
             };
@@ -90,12 +90,6 @@ class Households extends Component {
                         let user = new OBJECTS.User(person.pid, person.username, person.first_name, person.last_name, house.id);
                         houses[house.id].members.push(user);
                     }
-                    console.log(res.body.num_people);
-                    this.setState(
-                        {
-                            memberLength: res.body.people.length
-                        }
-                    )
                 });
         }
 
