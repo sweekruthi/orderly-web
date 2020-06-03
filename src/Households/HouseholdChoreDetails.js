@@ -5,6 +5,7 @@ class HouseholdChoreDetails extends Component {
         super(props);
         let choreTitle = '';
         if (this.props.chore !== undefined) {
+            console.log(this.props.chore)
             choreTitle = this.props.chore.title
         }
 
