@@ -19,7 +19,6 @@ class ScheduleAdd extends Component {
             status: []
         };
         this.getChoreList = this.getChoreList.bind(this);
-        this.unWrapChores = this.unWrapChores.bind(this);
         this.getInitChore = this.getInitChore.bind(this);
         this.displayChoreInfo = this.displayChoreInfo.bind(this);
         this.addChore = this.addChore.bind(this);
@@ -29,16 +28,20 @@ class ScheduleAdd extends Component {
         this.generateSchedule = this.generateSchedule.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleDescChange = this.handleDescChange.bind(this);
+        this.nameIsUnique = this.nameIsUnique.bind(this);
     }
 
     async componentDidMount() {
-        let choreList = await this.getChoreList();
-        let initChore = this.getInitChore(choreList);
+        let frontChoreList = await this.getChoreList();
+        let backChoreList = await this.getChoreList();
+        let initChore = this.getInitChore(frontChoreList);
+        console.log(frontChoreList)
+        console.log(initChore)
         this.setState(
             {
                 selectedChore: initChore,
-                backEndChores: choreList,
-                frontEndChores: choreList
+                backEndChores: backChoreList,
+                frontEndChores: frontChoreList
             }
         )
     }
@@ -60,7 +63,6 @@ class ScheduleAdd extends Component {
                         chores[i] = new OBJECTS.Chore(i, this.props.house.id, chore.assigned_to,
                             false, 0, chore.chore_name, chore.chore_description);
                     }
-                    console.log(week);
                 }
                 console.log(res.body);
                 this.setState(
@@ -70,26 +72,7 @@ class ScheduleAdd extends Component {
                     }
                 )
             })
-
         return chores;
-    }
-
-    unWrapChores() {
-        let choreList = {};
-        for (let userID in this.props.chores) {
-            let userChores = this.props.chores[userID];
-            for (let i = 0; i < userChores.length; i++) {
-                choreList[userChores[i].id] = userChores[i];
-            }
-        }
-        let unWrappedChores = {};
-        let choreID = 0;
-        for (let id in choreList) {
-            unWrappedChores[choreID] = choreList[id];
-            unWrappedChores[choreID].id = choreID;
-            choreID++;
-        }
-        return unWrappedChores;
     }
 
     getInitChore(chores) {
@@ -114,10 +97,11 @@ class ScheduleAdd extends Component {
     }
 
     addChore() {
-        let id = Object.keys(this.state.frontEndChores).length + 1;
+        let id = Object.keys(this.state.frontEndChores).length;
         this.setState(prevState => {
             let frontEndChores = Object.assign({}, prevState.frontEndChores);
-            frontEndChores[id] = new OBJECTS.Chore(id, this.props.house.id, "", false, 0, "Chore " + id, "");
+            let name = "Chore " + (id + 1);
+            frontEndChores[id] = new OBJECTS.Chore(id, this.props.house.id, "", false, 0, name, "");
             return { frontEndChores };
         });
         this.displayChoreInfo(id);
@@ -154,40 +138,65 @@ class ScheduleAdd extends Component {
     async saveChanges(id) {
         /*make a call to remove_chore passing in title/desc from backEndChores.  Then make a call to add_chore passing
         * in title/desc from frontEndChores*/
-        await this.removeFromBackend(id);
+        console.log("save ran");
+        if (this.nameIsUnique(id, this.state.frontEndChores[id].title)) {
+            await this.removeFromBackend(id);
+            let addRequestObject = {
+                hid: this.props.house.id,
+                names: [this.state.frontEndChores[id].title],
+                descriptions: [this.state.frontEndChores[id].description]
+            };
+            await Request
+                .post(ADD_CHORE_URL)
+                .send(addRequestObject)
+                .then(res => {
+                    this.setState(prevState => {
+                            let backEndChores = Object.assign({}, prevState.backEndChores);
+                            let frontEndChores = Object.assign({}, prevState.frontEndChores);
+                            backEndChores[id] = frontEndChores[id];
+                            return {backEndChores};
+                        }
+                    )
+                    this.setState(
+                        {
+                            status: res.body.added_chore_names
+                        }
+                    )
+                })
+                .catch(err => {
+                    this.setState(
+                        {
+                            status: err.message()
+                        }
+                    )
+                })
 
-        let addRequestObject = {
-            hid: this.props.house.id,
-            names: [this.state.frontEndChores[id].title],
-            descriptions: [this.state.frontEndChores[id].description]
-        };
-        await Request
-            .post(ADD_CHORE_URL)
-            .send(addRequestObject)
-            .then(res => {
-                this.setState(prevState =>
-                    {
-                        let backEndChores = Object.assign({}, prevState.backEndChores);
-                        let frontEndChores = Object.assign({}, prevState.frontEndChores);
-                        backEndChores[id] = frontEndChores[id];
-                        return { backEndChores };
-                    }
-                )
+            await this.generateSchedule();
+        }
+    }
+
+    nameIsUnique(id, name) {
+        for (let i = 0; i < Object.keys(this.state.frontEndChores).length; i++) {
+            if (this.state.frontEndChores[i].title === name && id !== i) {
                 this.setState(
                     {
-                        status: res.body.added_chore_names
+                        status: "Error: tried to save duplicate name"
                     }
                 )
-            })
-            .catch(err => {
+                return false;
+            }
+        }
+        for (let i = 0; i < Object.keys(this.state.backEndChores).length; i++) {
+            if (this.state.frontEndChores[i].title === name && id !== i) {
                 this.setState(
                     {
-                        status: err.message()
+                        status: "Error: tried to save duplicate name"
                     }
                 )
-            })
-
-        await this.generateSchedule();
+                return false;
+            }
+        }
+        return true;
     }
 
     async generateSchedule() {

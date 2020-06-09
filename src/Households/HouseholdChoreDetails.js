@@ -16,6 +16,7 @@ class HouseholdChoreDetails extends Component {
                        <div id="house-details-members-title">Description</div>
                        <textarea id="add-chore-supplies-form" value={this.props.chore.description}
                                  onChange={this.props.handleDescChange}/>
+                       <div>{this.props.status}</div>
                        <button id="add-chore-save" onClick={() => this.props.saveChanges(this.props.id)}>Save Changes</button>
                        <button id="add-chore-delete" onClick={() => this.props.deleteChore(this.props.id)}>Delete Chore</button>
                    </div>
