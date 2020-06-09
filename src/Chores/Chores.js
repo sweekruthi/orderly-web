@@ -28,8 +28,6 @@ class Chores extends Component {
         this.state = {
             choreView: ENUMS.ChoreView.CALENDAR,
             choreType: ENUMS.ChoreType.UPCOMING,
-            filters: this.props.filters,
-            currWeekNums: 0,
             selectedIcon: this.getInitIcon(),
             weekStart: weekStart,
             weekEnd: weekEnd,
@@ -37,7 +35,7 @@ class Chores extends Component {
             dow: initDate.getDay(),
             day: initDate.getDate(),
             month: initDate.getMonth(),
-            year: initDate.getFullYear(),
+            year: initDate.getFullYear()
         };
 
         this.setDay = this.setDay.bind(this);
@@ -54,11 +52,15 @@ class Chores extends Component {
 
     getInitIcon() {
         let initIcon = '';
-        for (let filter in this.props.filters) {
-            initIcon = this.props.filters[filter].id;
+        for (let i = 0; i < this.props.filters.length; i++) {
+            if (this.props.iconType === 'member') {
+                initIcon = this.props.filters[i].username;
+            } else {
+                initIcon = this.props.filters[i].id;
+            }
             break;
         }
-
+        console.log(initIcon)
         return initIcon;
     }
 
@@ -131,9 +133,6 @@ class Chores extends Component {
      */
     moveWeek(numWeeks) {
         this.moveDate(numWeeks, 7);
-        this.setState({
-            currWeekNums: this.state.currWeekNums + numWeeks
-        })
     }
 
     moveDate(numMoves, step) {
@@ -146,7 +145,7 @@ class Chores extends Component {
         newDate.setHours(0,0,0,0);
         newStart.setHours(0,0,0,0);
         newEnd.setHours(0,0,0,0);
-
+        this.props.setCurrWeek(newStart, this.props.filters);
         this.setState(
             {
                 dow: newDate.getDay(),
@@ -194,17 +193,17 @@ class Chores extends Component {
             <div id="chores">
                 <div id="left-column">
                     {this.props.backArrow}
-                    {/* <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/> */}
+                    <ChoreDate weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
                     <ChoreTypeButtons initType={this.state.choreType} setChoreType={this.setChoreType}/>
                 </div>
 
                 <div id="middle-column">
                     <DayOfWeekPicker initDay={this.state.dow} onDayClick={this.moveDay} onChevronClick={this.moveWeek} weekStart={this.state.weekStart} weekEnd={this.state.weekEnd}/>
-                    <ColumnFilter iconType={this.props.iconType} iconObjs={this.state.filters} selectIcon={this.setSelectedIcon}
+                    <ColumnFilter iconType={this.props.iconType} iconObjs={this.props.filters} selectIcon={this.setSelectedIcon}
                                   choreView={this.state.choreView}/>
                     <ChoreViewPage choreView={this.state.choreView} choreType={this.state.choreType}
                                    chores={this.props.chores} selectedIcon={this.state.selectedIcon}
-                                   currWeekNums={this.state.currWeekNums} inPast={this.state.inPast}/>
+                                   currWeekNum={this.props.currWeekNum} inPast={this.state.inPast}/>
                 </div>
 
                 <div id="right-column">

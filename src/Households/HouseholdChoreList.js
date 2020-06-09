@@ -16,7 +16,25 @@ class HouseholdChoreList extends Component {
     }
 
     componentDidMount() {
-        document.querySelector('.house-button').classList.add('house-button-selected');
+        if (Object.keys(this.props.chores).length !== 0) {
+            document.querySelector('.house-button').classList.add('house-button-selected');
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.selectedID !== this.props.selectedID) {
+            this.switchToNewChore(this.props.selectedID)
+        }
+    }
+
+    switchToNewChore(id) {
+        let prevSelected = document.querySelector('.house-button-selected');
+        if (prevSelected !== null) {
+            prevSelected.classList.remove('house-button-selected');
+        }
+        if (id !== '') {
+            document.getElementById(id).classList.add('house-button-selected');
+        }
     }
 
     /**
@@ -32,7 +50,7 @@ class HouseholdChoreList extends Component {
 
         for (let chore in this.props.chores) {
             let currChore = this.props.chores[chore];
-            infoButtons.push(<ChoreInfoButton displayChoreInfo={this.props.displayChoreInfo}
+            infoButtons.push(<ChoreInfoButton id={currChore.id} displayChoreInfo={this.props.displayChoreInfo}
                                               toggleButton={this.toggleHouseButton} chore={currChore}/>);
         }
 

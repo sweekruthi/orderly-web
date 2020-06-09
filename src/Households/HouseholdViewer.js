@@ -23,6 +23,7 @@ class HouseholdViewer extends Component {
             initHouse = this.props.houses[house].id;
             break;
         }
+
         return initHouse;
     }
 

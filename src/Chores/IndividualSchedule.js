@@ -5,27 +5,35 @@ import * as OBJECTS from "../App/ObjectStor";
 import Cookies from 'js-cookie';
 import Request from 'superagent';
 
-let UNDEFINED = "";
+let UNDEFINED = "-";
 
 class IndividualSchedule extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            chores: {}
+            chores: {},
+            houses: [new OBJECTS.House(0, "", [], 0, 0)],
+            currWeekNum: 0
         };
-        this.getCurrWeeks = this.getCurrWeeks.bind(this);
+        this.setCurrWeek = this.setCurrWeek.bind(this);
     }
 
     async componentDidMount() {
         const choreIds = await this.getChores();
-        let choreInfo = {};
+        let choreInfo = [];
         for (let key in choreIds) {
             const id = choreIds[key];
             const chore = await this.getChoreInfo(id);
-            choreInfo[key] = chore;
+            choreInfo.push(chore);
         }
+        const houses = await this.getHouses()
+        const chores = {};
+        chores[houses[0].id] = choreInfo;
+        console.log(this.getInitCurrWeek(houses));
         this.setState({
-            chores: choreInfo
+            chores: chores,
+            houses: houses,
+            currWeekNum: this.getInitCurrWeek(houses),
         });
     }
 
@@ -46,7 +54,7 @@ class IndividualSchedule extends Component {
             .send(choreRequestObject)
             .then(res => {
                 choreIds = res.body.chore_list;
-
+                console.log(res.body);
             });
 
         return choreIds;
@@ -67,19 +75,68 @@ class IndividualSchedule extends Component {
         return chore;
     }
 
-    getCurrWeeks(weekStart) {
-        let houseCurrWeeks = {};
+    async getHouses() {
+        let houses = [];
+        let house = new OBJECTS.House("-", "-", [], 0, 0);
 
-        for (let house in this.state.houses) {
-            let currHouse = this.state.houses[house];
-            let houseWeekStart = new Date(currHouse.startDate);
-            houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
-            houseWeekStart.setHours(0,0,0,0,);
-            let weekDiff = (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
-            houseCurrWeeks[house] = weekDiff;
+        let userRequestObject = {
+            username: Cookies.get('username')
+        };
+        await Request
+            .post(URLS.USER_INFO_URL)
+            .send(userRequestObject)
+            .then(res => {
+                if (res.body.household_id !== UNDEFINED) {
+                    house.id = res.body.household_id;
+                    house.title = res.body.household_name;
+                    houses.push(house);
+                }
+            });
+
+
+        return await this.getHouseScheduleInfo(houses);
+    }
+
+    async getHouseScheduleInfo(houses) {
+        for (let i = 0; i < houses.length; i++) {
+            let house = houses[i];
+            let houseRequestObject = {
+                hid: parseInt(house.id)
+            };
+            await Request
+                .post(URLS.HOUSE_FULL_SCH_URL)
+                .send(houseRequestObject)
+                .then(res => {
+                    if (res.body.error_message === UNDEFINED) {
+                        house.weekNum = parseInt(res.body.num_weeks);
+                        house.startDate = Date.parse(res.body.start_date+"T00:00:00");
+                    }
+                    console.log(res.body);
+                });
         }
+        return houses;
+    }
 
-        return houseCurrWeeks;
+    getInitCurrWeek(houses) {
+        let weekStart = new Date();
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        weekStart.setHours(0,0,0,0);
+        return this.setCurrWeek(weekStart, houses);
+    }
+
+    setCurrWeek(weekStart, houses) {
+        let houseCurrWeek = 0;
+        let houseWeekStart = new Date(houses[0].startDate);
+        houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
+        houseWeekStart.setHours(0,0,0,0,);
+        let weekDiff = (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
+        this.setState(
+            {
+                currWeekNum: weekDiff
+            }
+        )
+
+        return weekDiff
     }
 
 
@@ -87,7 +144,7 @@ class IndividualSchedule extends Component {
         return(
             <div>
                 <Chores iconType={'house'} filters={this.state.houses} chores={this.state.chores}
-                        getCurrWeeks={this.getCurrWeeks} houseID={this.state.houseID}/>
+                        currWeekNum={this.state.currWeekNum} setCurrWeek={this.setCurrWeek}/>
             </div>
         )
     }

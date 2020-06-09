@@ -4,10 +4,6 @@ import React, {Component} from 'react';
  * Displays a portrait for the user
  */
 class MemberCircle extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return(
             <div className={this.props.memberSpacing}>

@@ -63,6 +63,10 @@ class ScheduleEdit extends Component {
             .post(GENERATE_SCHEDULE_URL)
             .send(scheduleRequestObject)
 
+        console.log(parseInt(this.state.startingMonth));
+        console.log(parseInt(this.state.startingDay));
+        console.log(parseInt(this.state.startingYear));
+
         this.props.goBack()
     }
 
@@ -74,11 +78,11 @@ class ScheduleEdit extends Component {
                 <div className="house-details">
                     <div id="house-details-members-title">Starting Week</div>
                     <div id="schedule-start-forms">
-                        <input className="schedule-start-form" type="text" onChange={this.handleDayChange}
-                               value={this.state.startingDay} placeholder='MM'/>
+                        <input className="schedule-start-form" type="text" onChange={this.handleMonthChange}
+                               value={this.state.startingMonth} placeholder='MM'/>
                         <div className='schedule-start-slash'>/</div>
-                        <input className="schedule-start-form"  type="text" onChange={this.handleMonthChange}
-                               value={this.state.startingMonth} placeholder='DD'/>
+                        <input className="schedule-start-form"  type="text" onChange={this.handleDayChange}
+                               value={this.state.startingDay} placeholder='DD'/>
                         <div className='schedule-start-slash'>/</div>
                         <input className="schedule-start-form" style={{width: '3em'}} type="text" onChange={this.handleYearChange}
                                value={this.state.startingYear} placeholder='YYYY'/>

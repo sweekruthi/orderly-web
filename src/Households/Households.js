@@ -53,7 +53,7 @@ class Households extends Component {
             });
 
         
-        return houses;
+        return await this.getHouseScheduleInfo(houses);
     }
 
     async getHouseScheduleInfo(houses) {
@@ -69,6 +69,7 @@ class Households extends Component {
                         house.weekNum = parseInt(res.body.num_weeks);
                         house.startDate = parseInt(res.body.start_date);
                     }
+                    console.log(res.body.error_message);
                 });
         }
 

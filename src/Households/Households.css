@@ -247,6 +247,7 @@
     border-radius: .3em;
     border: solid 1px lightgrey;
     outline: none;
+    clear: right;
 }
 
 #add-chore-save {

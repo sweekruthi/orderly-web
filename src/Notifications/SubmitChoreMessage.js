@@ -11,7 +11,7 @@ class SubmitChoreMessage extends Component {
         this.state = {
             files: [],
             name: this.getSubmitter(),
-            members: ['member 1', 'member 2'],
+            members: [],
             submitted: false
         }
         this.createMemberCircles = this.createMemberCircles.bind(this);
@@ -81,7 +81,7 @@ class SubmitChoreMessage extends Component {
                 </div>
                 </DragAndDrop>
                 <div className='submit-details'>
-                    <div className='submit-title'>Submitted By: {this.state.name}</div>
+                    <div className='submit-title'>Submitted By: evan bacon{this.state.name}</div>
                     <div className='submit-approve'>
                         <div className='approved-title'>Approved By: </div>
                         {this.createMemberCircles()}

@@ -49,8 +49,6 @@ class HouseholdsList extends Component {
             let currHouse = this.props.houses[house];
             houseButtons.push(<HouseButton onClick={this.displayHouseInfo} title={currHouse.title} id={currHouse.id} key={currHouse.id}/>);
         }
-
-        houseButtons.push(<HouseButton onClick={this.goToAddHousehold} title={`+ Add household`} id= {-1} key={-1}/>);
         
         if (houseButtons.length !== 0) {
             return houseButtons;

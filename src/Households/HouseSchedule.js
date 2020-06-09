@@ -11,20 +11,25 @@ import {HOUSE_MEMBERS_URL} from "../App/URLStor";
 class HouseSchedule extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             users: {},
-            chores: {}
+            chores: {},
+            startDate: 100000,
+            currWeekNum: 0,
+            numWeeks: 0
         };
 
         this.goBack = this.goBack.bind(this);
-        this.getCurrWeek = this.getCurrWeek.bind(this);
+        this.setCurrWeek = this.setCurrWeek.bind(this);
     }
 
     async componentDidMount() {
         this.setState(
             {
                 users: await this.getMembers(),
-                chores: await this.getChores()
+                chores: await this.getChores(),
+                currWeekNum: this.getInitCurrWeek()
             }
         )
     }
@@ -40,6 +45,9 @@ class HouseSchedule extends Component {
             hid: this.props.house.id
         };
 
+        let startDate = 0;
+        let numWeeks = 0;
+
         await Request
             .post(URLS.HOUSE_FULL_SCH_URL)
             .send(choreRequestObject)
@@ -53,43 +61,64 @@ class HouseSchedule extends Component {
                         }
                         chores[chore.assigned_to].push(new OBJECTS.Chore(chore.chore_name, this.props.house.id, chore.assigned_to,
                             false, i, chore.chore_name, chore.chore_description));
-                        console.log(chore.assigned_to)
                     }
+                    startDate = res.body.start_date+"T00:00:00";
+                    numWeeks = res.body.num_weeks;
                 }
+                console.log(res.body)
             });
+        console.log(chores);
+        await this.setState(
+            {
+                startDate: Date.parse(startDate),
+                numWeeks: numWeeks
+            }
+        )
         return chores;
     }
 
     async getMembers() {
         let members = [];
-
         let memberRequestObject = {
-            hid: this.props.house.id
+            hid: parseInt(this.props.house.id)
         };
         await Request
             .post(HOUSE_MEMBERS_URL)
             .send(memberRequestObject)
             .then(res => {
-                for (let member in res.body.people) {
+                for (let i = 0; i < res.body.people.length; i++) {
+                    let member = res.body.people[i];
                     members.push(new OBJECTS.User(member.pid, member.username, member.first_name, member.last_name, this.props.house.id));
                 }
             });
-
         return members;
     }
 
-    getCurrWeek(weekStart) {
-        let houseWeekStart = new Date(this.props.house.startDate);
+    getInitCurrWeek() {
+        let weekStart = new Date();
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        weekStart.setHours(0,0,0,0);
+        return this.setCurrWeek(weekStart, []);
+    }
+
+    setCurrWeek(weekStart, filters) {
+        let houseWeekStart = new Date(this.state.startDate);
         houseWeekStart.setDate(houseWeekStart.getDate() - houseWeekStart.getDay());
         houseWeekStart.setHours(0,0,0,0,);
-        return (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
+        let currWeek = (weekStart.getTime() - houseWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000);
+        this.setState(
+            {
+                currWeekNum: currWeek
+            }
+        )
+        return currWeek;
     }
 
     render() {
         return(
             <div>
                 <Chores iconType={'member'} filters={this.state.users} chores={this.state.chores}
-                        getCurrWeeks={this.getCurrWeek} backArrow={<BackArrow
+                        currWeekNum={this.state.currWeekNum} setCurrWeek={this.setCurrWeek} backArrow={<BackArrow
                         goBack={this.goBack}/>} scheduleAddOn={<ScheduleButtons house={this.props.house}
                                                                                 chores={this.state.chores}
                                                                                 setPage={this.props.setPage}/>}/>

@@ -59,10 +59,10 @@ class ColumnFilter extends Component {
             let icon = this.props.iconObjs[obj];
             if (this.props.iconType === 'house') {
                 icons.push(<HouseIcon iconClass={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
-                                  onClick={this.toggleButton} iconSize={40} nameSize="14pt" houseName={icon.name} houseID={icon.id}/>);
+                                  onClick={this.toggleButton} iconSize={40} nameSize="14pt" houseName={icon.title} houseID={icon.id}/>);
             } else if (this.props.iconType === 'member') {
                 icons.push(<MemberIcon className={'column-button-' + this.props.choreView} iconPos={this.buttonPosition(index, 8)}
-                                   onClick={this.toggleButton} member={icon.name} memberID={icon.id}/>);
+                                   onClick={this.toggleButton} member={icon.first_name + " " + icon.last_name} memberID={icon.username}/>);
             }
             index++;
         }

@@ -83,14 +83,6 @@ class AddHousehold extends Component {
             })
     }
 
-    createHouse() {
-
-    }
-
-    addUsers() {
-
-    }
-
     goBack() {
         this.props.setPage(<Households/>);
     }

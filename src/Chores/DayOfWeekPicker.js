@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ChoreDate from "./ChoreDate";
 
 import { FaChevronLeft } from 'react-icons/fa';
 import { FaChevronRight } from 'react-icons/fa';
@@ -21,7 +20,7 @@ class DayOfWeekPicker extends Component {
      * Select the initial dow button.
      */
     componentDidMount() {
-        // this.state.dowRefs[this.props.initDay].current.classList.add('dow-selected');
+        this.state.dowRefs[this.props.initDay].current.classList.add('dow-selected');
     }
 
     /**
@@ -46,13 +45,14 @@ class DayOfWeekPicker extends Component {
     render() {
         return (
             <div>
-                <ul id="dow-picker">
+                <div id="dow-picker">
                     <button className="dow-button-chevron" onClick={() => this.props.onChevronClick(-1)}>
                         <FaChevronLeft className="dow-chevron" size={45}/></button>
-                    <ChoreDate weekStart={this.props.weekStart} weekEnd={this.props.weekEnd}/>
+                    {this.state.dow.map((value, index) =>
+                    {return <button className="dow-button" ref={this.state.dowRefs[index]}>{value}</button>})}
                     <button className="dow-button-chevron" onClick={() => this.props.onChevronClick(1)}>
                         <FaChevronRight className="dow-chevron" size={45}/></button>
-                </ul>
+                </div>
             </div>
         );
     }

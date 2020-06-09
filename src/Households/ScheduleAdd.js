@@ -5,42 +5,89 @@ import * as OBJECTS from "../App/ObjectStor";
 import Request from "superagent";
 import {GENERATE_SCHEDULE_URL, HOUSE_FULL_SCH_URL, REMOVE_CHORE_URL} from "../App/URLStor";
 import {ADD_CHORE_URL} from "../App/URLStor";
-
-let choreID = 2;
+import * as URLS from "../App/URLStor";
 
 class ScheduleAdd extends Component {
     constructor(props) {
         super(props);
 
-        this.unWrapChores = this.unWrapChores.bind(this);
-        this.getInitChore = this.getInitChore.bind(this);
-
-        let unWrappedChores = this.unWrapChores();
-        let initChore = this.getInitChore(unWrappedChores);
-        choreID = Object.keys(unWrappedChores).length;
-
         this.state = {
-            selectedChore: initChore,
-            backEndChores: unWrappedChores,
-            frontEndChores: unWrappedChores,
+            selectedChore: '',
+            backEndChores: {},
+            frontEndChores: {},
+            choreDetails: <div/>,
             status: []
         };
+        this.getChoreList = this.getChoreList.bind(this);
+        this.unWrapChores = this.unWrapChores.bind(this);
+        this.getInitChore = this.getInitChore.bind(this);
         this.displayChoreInfo = this.displayChoreInfo.bind(this);
         this.addChore = this.addChore.bind(this);
         this.deleteChore = this.deleteChore.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
-        this.showDetails = this.showDetails.bind(this);
         this.getSchedule = this.getSchedule.bind(this);
         this.generateSchedule = this.generateSchedule.bind(this);
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.handleDescChange = this.handleDescChange.bind(this);
+    }
+
+    async componentDidMount() {
+        let choreList = await this.getChoreList();
+        let initChore = this.getInitChore(choreList);
+        this.setState(
+            {
+                selectedChore: initChore,
+                backEndChores: choreList,
+                frontEndChores: choreList
+            }
+        )
+    }
+
+    async getChoreList() {
+        let chores = {};
+
+        let choreRequestObject = {
+            hid: parseInt(this.props.house.id)
+        };
+        await Request
+            .post(URLS.HOUSE_FULL_SCH_URL)
+            .send(choreRequestObject)
+            .then(res => {
+                if (res.body.weeks.length > 0) {
+                    let week = res.body.weeks[0]["week0"];
+                    for (let i = 0; i < week.length; i++) {
+                        let chore = week[i];
+                        chores[i] = new OBJECTS.Chore(i, this.props.house.id, chore.assigned_to,
+                            false, 0, chore.chore_name, chore.chore_description);
+                    }
+                    console.log(week);
+                }
+                console.log(res.body);
+                this.setState(
+                    {
+                        startDate: Date.parse(res.body.start_date+"T00:00:00"),
+                        numWeeks: res.body.numWeeks
+                    }
+                )
+            })
+
+        return chores;
     }
 
     unWrapChores() {
-        let unWrappedChores = {};
+        let choreList = {};
         for (let userID in this.props.chores) {
             let userChores = this.props.chores[userID];
             for (let i = 0; i < userChores.length; i++) {
-                unWrappedChores[userChores[i].id] = userChores[i];
+                choreList[userChores[i].id] = userChores[i];
             }
+        }
+        let unWrappedChores = {};
+        let choreID = 0;
+        for (let id in choreList) {
+            unWrappedChores[choreID] = choreList[id];
+            unWrappedChores[choreID].id = choreID;
+            choreID++;
         }
         return unWrappedChores;
     }
@@ -59,16 +106,15 @@ class ScheduleAdd extends Component {
      * Grabs and displays info related to a household.
      */
     displayChoreInfo(id) {
-        this.setState(
-            {
-                selectedChore: id
-            }
+        this.setState(prevState =>
+            ({
+                selectedChore: id,
+            })
         );
     }
 
     addChore() {
-        choreID++;
-        let id = choreID + "";
+        let id = Object.keys(this.state.frontEndChores).length + 1;
         this.setState(prevState => {
             let frontEndChores = Object.assign({}, prevState.frontEndChores);
             frontEndChores[id] = new OBJECTS.Chore(id, this.props.house.id, "", false, 0, "Chore " + id, "");
@@ -94,9 +140,15 @@ class ScheduleAdd extends Component {
     }
 
     async deleteChore(id) {
+        console.log(id);
         await this.removeFromBackend(id);
         delete this.state.frontEndChores[id];
-        await this.generateSchedule()
+        this.setState(prevState => (
+            {
+                selectedChore: this.getInitChore(prevState.frontEndChores)
+            }
+        ));
+        await this.generateSchedule();
     }
 
     async saveChanges(id) {
@@ -135,31 +187,28 @@ class ScheduleAdd extends Component {
                 )
             })
 
-        this.generateSchedule()
+        await this.generateSchedule();
     }
 
     async generateSchedule() {
-        let currSchedule = this.getSchedule();
-        let numWeeks = 1;
-        let startDate = new Date();
-        if (currSchedule.numWeeks !== undefined) {
-            numWeeks = currSchedule.numWeeks;
-        }
-
-        if (currSchedule.startDate !== undefined) {
-            startDate = new Date(currSchedule.startDate);
-        }
+        let currSchedule = await this.getSchedule();
+        let numWeeks = currSchedule.numWeeks;
+        let startDate = new Date(currSchedule.startDate);
+        console.log(currSchedule.startDate);
 
         let scheduleRequestObject = {
             hid: this.props.house.id,
             num_weeks: numWeeks,
-            month: startDate.getDate(),
-            day: startDate.getMonth(),
+            month: startDate.getMonth(),
+            day: startDate.getDate(),
             year: startDate.getFullYear()
         }
         await Request
             .post(GENERATE_SCHEDULE_URL)
             .send(scheduleRequestObject)
+            .then(res => {
+                console.log(res.body);
+            })
             .catch(err => {
                 this.setState({
                     status: "schedule contains chores with duplicate names"
@@ -168,40 +217,64 @@ class ScheduleAdd extends Component {
     }
 
     async getSchedule() {
+        let schedule = {};
+
         let scheduleRequestObject = {
             hid: this.props.house.id
         }
-        Request
+        await Request
             .post(HOUSE_FULL_SCH_URL)
             .send(scheduleRequestObject)
             .then(res => {
-                return {
-                    numWeeks: res.body.num_weeks,
-                    startDate: res.body.start_date
+                if (res.error_message === '-') {
+                    schedule =  {
+                        numWeeks: res.body.num_weeks,
+                        startDate: new Date(Date.parse(res.body.start_date+"T00:00:00"))
+                    }
+                    console.log(res.body.start_date)
+                } else {
+                    schedule = {
+                        numWeeks: 1,
+                        startDate: new Date(Date.now())
+                    }
                 }
+                console.log(res.body);
             })
+
+        return schedule;
     }
 
-    showDetails() {
-        if (Object.keys(this.state.frontEndChores).length === 0) {
-            return <div/>
-        } else {
-            console.log(this.state.frontEndChores[this.state.selectedChore])
-            return <HouseholdChoreDetails chore={this.state.frontEndChores[this.state.selectedChore]} saveChanges={this.saveChanges}
-                                          deleteChore={this.deleteChore} status={this.state.status}/>
-        }
+    handleTitleChange(e) {
+        let newTitle = e.target.value;
+        this.setState(prevState => {
+            let frontEndChores = Object.assign({}, prevState.frontEndChores);
+            frontEndChores[this.state.selectedChore].title = newTitle;
+            return { frontEndChores };
+        });
+    }
+
+    handleDescChange(e) {
+        let newDesc = e.target.value;
+        this.setState(prevState => {
+            let frontEndChores = Object.assign({}, prevState.frontEndChores);
+            frontEndChores[this.state.selectedChore].description = newDesc;
+            return { frontEndChores };
+        });
     }
 
     render() {
         return(
             <div id="schedule-add">
-                <HouseholdChoreList chores={this.state.frontEndChores} displayChoreInfo={this.displayChoreInfo}
-                                    goBack={this.props.goBack} addChore={this.addChore}/>
-                {this.showDetails()}
+                <HouseholdChoreList chores={this.state.frontEndChores} selectedID={this.state.selectedChore}
+                                    displayChoreInfo={this.displayChoreInfo} goBack={this.props.goBack}
+                                    addChore={this.addChore}/>
+                <HouseholdChoreDetails chore={this.state.frontEndChores[this.state.selectedChore]}
+                                       saveChanges={this.saveChanges} handleTitleChange={this.handleTitleChange}
+                                       handleDescChange={this.handleDescChange} deleteChore={this.deleteChore}
+                                       status={this.state.status} id={this.state.selectedChore}/>
             </div>
         );
     }
-
 }
 
 export default ScheduleAdd

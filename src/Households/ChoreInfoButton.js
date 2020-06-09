@@ -8,13 +8,12 @@ class ChoreInfoButton extends Component {
 
     handleClick(e) {
         this.props.displayChoreInfo(this.props.chore.id);
-        console.log(this.props.chore.id)
         this.props.toggleButton(e);
     }
 
     render() {
         return(
-            <button className="house-button" onClick={this.handleClick}>
+            <button id={this.props.id} className="house-button" onClick={this.handleClick}>
                 {this.props.chore.title}
             </button>
         );

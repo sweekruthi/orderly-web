@@ -21,16 +21,20 @@ class ChoreCalendar extends Component {
 
     createChoreBoxes() {
         let choreBoxes = [];
+        let rowIndex = 0;
         let filterIndex = 0;
         for (let filter in this.props.chores) {
-            let currChore = this.props.chores[filter];
-            console.log("current chore is", currChore);
-            // if (this.props.currWeekNums[filter] === currChore.weekNum && this.props.rightType(currChore.completed)) {
-                choreBoxes.push(<ChoreCalendarBox choreTitle={currChore.title} row={filter} column={filterIndex}/>);
-            // }
+            console.log(this.props.currWeekNum)
+            let currChores = this.props.chores[filter];
+            for (let i = 0; i < currChores.length; i++) {
+                let currChore = currChores[i];
+                if (this.props.currWeekNum === currChore.weekNum && this.props.rightType(currChore.completed)) {
+                    choreBoxes.push(<ChoreCalendarBox choreTitle={currChore.title} row={rowIndex} column={filterIndex}/>);
+                    rowIndex++;
+                }
+            }
             filterIndex++;
         }
-
         return choreBoxes;
     }
 

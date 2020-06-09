@@ -12,15 +12,15 @@ class ChoreViewPage extends Component {
 
     setUpChoreView() {
         let viewPage = <div/>;
-        /* if (this.props.choreView === ENUMS.ChoreView.CALENDAR) {
+        if (this.props.choreView === ENUMS.ChoreView.CALENDAR) {
             viewPage = <ChoreCalendar choreType={this.props.choreType} chores={this.props.chores}
-                                      currWeekNums={this.props.currWeekNums} inPast={this.props.inPast}
+                                      currWeekNum={this.props.currWeekNum} inPast={this.props.inPast}
                                       rightType={this.rightType}/>
-        } else { */
+        } else {
             viewPage = <ChoreList choreType={this.props.choreType} chores={this.props.chores}
-                                  currWeekNums={this.props.currWeekNums} inPast={this.props.inPast}
+                                  currWeekNum={this.props.currWeekNum} inPast={this.props.inPast}
                                   rightType={this.rightType} selectedIcon={this.props.selectedIcon}/>
-        //}
+        }
 
         return viewPage;
     }
@@ -32,7 +32,6 @@ class ChoreViewPage extends Component {
     }
 
     render() {
-        console.log("curr week nums", this.props.currWeekNums);
         return (
             <div>
                 {this.setUpChoreView()}
