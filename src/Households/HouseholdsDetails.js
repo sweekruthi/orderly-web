@@ -51,13 +51,14 @@ class HouseholdsDetails extends Component {
                             </button>
                         </div>
                         <hr className="house-details-linebreak"/>
-                        <div className="house-details-nav-away">
+                        {/*<div className="house-details-nav-away">
                             <div className="house-details-nav-title" > Preferences </div>
                             <button className="house-details-nav-button">
                                 <FaChevronRight className="house-details-nav-chevron" size={45}/>
                             </button>
                         </div>
-                        <hr className="house-details-linebreak"/></div>
+                        <hr className="house-details-linebreak"/>*/}
+            </div>
         }
     }
 
